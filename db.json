@@ -1,0 +1,51 @@
+{
+    "products":[
+        {
+            "id":0,
+            "img":"https://zeroworldblack.com/storage/theme/2022_11/15/xuvUjJNJlj4afPga71JDBfghMnayYymet2q3zl22.jpg",
+            "title":"ZERO",
+            "store":"제로월드 강남점",            
+            "genre":["공포","스릴러"],
+            "info": "제로월드 신테마로 당신을 초대합니다",
+            "like":59
+        },
+        {
+            "id":1,
+            "img":"https://www.zerogangnam.com/storage/AVISPw8N2JfMThKvnk3VJzeY9qywIaYd8pTy46Xx.jpg",
+            "title":"포레스트",
+            "store":"제로월드 강남점",            
+            "genre":["공포","스릴러"],
+            "info": "'Show dawn' 초대장이 했습니다.\n<총 상금 50억의 호러퀴즈쇼 'Show dawn'>\n당신은 이겨낼 수 있습니까?",
+            "like":59
+        },
+        {
+            "id":2,
+            "img":"https://www.zerogangnam.com/storage/h77RkOOKRX3XTVttuI7KPApcV2sSlFORaTTFlm60.jpg",
+            "title":"DONE",
+            "store":"제로월드 강남점",            
+            "genre":["범죄","잠입","액션"],
+            "info": "우리는 런던 뒷골목을 누비는Alex 형제들.\n우연히 찰리 전파사에 굉장히 큰 돈이 숨겨져 있다는 소문을 들었다.\n 오늘은 전파사의 휴무일.털자!",
+            "like":59
+        },
+        {
+            "id":3,
+            "img":"https://www.zerogangnam.com/storage/aM6F3lOsKUwHA5NCkusfmH2ilNupcgskh34SiNuf.jpg",
+            "title":"링",
+            "store":"제로월드 강남점",            
+            "genre":["공포","스릴러"],
+            "info": "내 조카 유키는 자살할 아이가 아닌데...",            
+            "like":59
+        },
+
+         {
+            "id":4,
+            "img":"https://point-nine.com/file/theme/6_a.jpg",
+            "title":"열쇠공의 이중생활",
+            "store":"포인트나인 강남점",            
+            "genre":["추리","드라마","판타지"],
+            "info": "",
+            "like":59
+        }
+       
+    ]
+}
