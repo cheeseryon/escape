@@ -1,13 +1,13 @@
-import { Container } from 'react-bootstrap';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import ProductAll from './page/ProductAll';
-import ProductDetail from './page/ProductDetail';
-import LoginPage from './page/LoginPage';
-/* import UserPage from './page/UserPage'; */
-import Navbar from './component/Navbar';
 import { useEffect, useState } from 'react';
 import PrivateRoute from './route/PrivateRoute';
+import ProductAll from './page/ProductAll';
+import LoginPage from './page/LoginPage';
+import Navbar from './component/Navbar';
+import AreaList from './component/AreaList';
+
+/* import UserPage from './page/UserPage'; */
 
 //1. 전체상품 페이지/로그인/상품상세페이지
 //1-1 네비게이션바
@@ -19,13 +19,13 @@ import PrivateRoute from './route/PrivateRoute';
 
 
 function App() {
-  const [authenticate, setAuthenticate] = useState(false);
+  const [authenticate, setAuthenticate] = useState(true);
   useEffect(()=> {
-    console.log(authenticate);
+/*     console.log(authenticate); */
   },[authenticate])
 
   return (  
-    <Container>
+    <>
       <Navbar authenticate={authenticate} setAuthenticate={setAuthenticate}/>
       <Routes>
         <Route path='/' element={<ProductAll />} />
@@ -36,7 +36,7 @@ function App() {
         <Route path='/login' element={<LoginPage setAuthenticate={setAuthenticate}/>} />
 {/*         <Route path='/user' element={<UserPage />} /> */}
       </Routes>
-    </Container>
+    </>
   );
 }
 

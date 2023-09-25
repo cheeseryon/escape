@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../App.css'
-import { Form , Button} from 'react-bootstrap';
 
 const ProductDetail = (item) => {
   const {id} = useParams();
@@ -27,14 +26,14 @@ const ProductDetail = (item) => {
             </div>
             <div className='text'>
                 <p className='title'>{product?.title}</p>
-                <p className='genre'>장르 : {product?.genre.join(" ")}</p>
+                <p className='genre'>장르 : {product?.genre}</p>
                 <p className='store'>매장 : {product?.store}</p>
                 <p className='like'><span></span> {product?.like}</p>
                 <p className='info'>테마정보</p>
                 <p className='infoText'>{product?.info}</p>
             </div>
         </div>
-        <Form.Select>
+        {/* <Form.Select>
           <option>인원수 선택</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -42,7 +41,7 @@ const ProductDetail = (item) => {
         </Form.Select>
 
         <Button variant="dark">예약하기</Button>
-        <Button variant="dark">리스트 추가</Button>
+        <Button variant="dark">리스트 추가</Button> */}
     </div>
 
 
