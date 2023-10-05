@@ -1,23 +1,38 @@
-import React from 'react'
+import { React , useEffect } from 'react'
 import '../App.css'
-import { useNavigate } from 'react-router-dom'
+import { useDispatch , useSelector , } from 'react-redux'
 import { useState } from 'react'
+import key from '../img/key.png'
+import star from '../img/star.png'
+import xIcon from '../img/xIcon.png'
 
-const ProductCard = ({item}) => {
-  const navigate = useNavigate();
-  const showDetail = () => {
-    navigate(`/product/${item?.id}`)
-  }
 
-  const [like , setLike] = useState(false)
+const ProductCard = ({item , getItem}) => {
+  const postItem = () => {
+    getItem(item);
+  };
+  let dispatch = useDispatch()
+  let modalLike = useSelector(state => state.modalLike)
+  let modalItemId = useSelector(state => state.modalItemId)
+
+  const [cardLike , setCardLike] = useState(false)
+  useEffect (() => {
+    if(item.id == modalItemId) {
+      setCardLike(modalLike)
+    }
+  }, [modalLike])
+ 
+  let cardItemId = item.id
   const likeClick = () => {
-    setLike(!like)
+    setCardLike(!cardLike)
+    dispatch ({type:"CARD_LIKE" , payload:{cardLike:!cardLike}})
+    dispatch ({type:"CARD_ID" , payload:{cardItemId}})
   }
-
+  
   return (
     <div className='themeItem'>
-      <div className={`like ${like ? 'on' : ''}`} onClick={likeClick} />
-      <div className="itemWrap" onClick={showDetail}>
+      <div className={`like ${cardLike ? 'on' : ''}`} onClick={likeClick}/>
+      <div className="itemWrap" onClick={postItem}>
         <div className="imgBox">
           <img src={item?.img} alt="" />
         </div>
@@ -25,6 +40,17 @@ const ProductCard = ({item}) => {
           <div className="title">{item?.title}</div>
           <div className="genre">{item?.genre[0]}</div>
           <div className="store">{item?.store}</div>
+          <div className='evaluation'>
+            <p className='difficulty'>
+              <span className='keyIcon'><img src={key} alt="열쇠" /></span>
+              <span className='xIcon'><img src={xIcon} alt="" /></span>
+              <span className='num'>{item.difficulty}</span>
+              </p>
+            <p className='score'>
+              <span className='starIcon'><img src={star} alt="별" /></span>
+              <span className='num'>4.5</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

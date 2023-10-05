@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 const GenreList = () => {
     const genre = [
@@ -9,37 +10,42 @@ const GenreList = () => {
         "공포",
         "잠입",
         "감성",
-        "추리",
         "모험",
-        "문제",
-        "야외",
-        "코믹",
-        "기타"
+        '기타'
       ]
 
-/*     const [genreName , setGenreName] = useState('') */
     const dispatch = useDispatch();
+    const [ genreName , setGenreName ] = useState(genre[0])
+    const [ genreTextColor , setGenreTextColor] = useState(0)
+
+    useEffect(()=> {
+        dispatch({type:"GENRE_SELECT" , payload:{genreName}})
+    },[dispatch])
+
+    let areaName = useSelector(state => state.areaName)
+
     const genreCheck = (e) => {
         e.preventDefault()
-        let genreName =e.target.innerText
-        
+        let targetText = e.target.innerText
 
-        dispatch({type:"GENRE_SELECT" , payload:{genreName}})
+        setGenreName(targetText)
+        setGenreTextColor(e.target.value)
+        dispatch({type:"GENRE_SELECT" , payload:{genreName:targetText}})
     }
 
-    /* useEffect(()=> {
-        console.log(genreName)
-    }) */
+    useEffect(()=> {
+        setGenreTextColor(0)
+    },[areaName])
 
   return (
     <div className="genreList">
 
-            <ul>
-                {
-                    genre.map(
-                        (list, idx) => <li  onClick={genreCheck} key={idx} >{list}</li>
-                    )
-                }
+            <ul>{
+                    genre.map((list, idx) =>
+                    <li className={`${genreTextColor == idx ? 'on' : ''}`} onClick={genreCheck} key={idx} value={idx}>
+                        {list}
+                    </li>
+                )}
             </ul>
 
     </div>

@@ -11,8 +11,7 @@ const Navbar = ({authenticate, setAuthenticate}, props) => {
   /* 네비게이션 메뉴바 영역을 배열로 처리 -> 메뉴의 확장성 */
   const menuList = [
     "테마정보",
-    "매장정보",
-    "커뮤니티"   
+    "매장정보" 
   ]
 
   let [width, setWidth] = useState();

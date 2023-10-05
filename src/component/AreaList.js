@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import { React , useEffect } from 'react'
 import '../App.css'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch , useSelector } from 'react-redux'
 
 const AreaList = () => {
     const areaList = [
@@ -13,12 +13,7 @@ const AreaList = () => {
                 "강남",
                 "홍대",
                 "신촌",
-                "건대",
-                "대학로",
-                "신림",
-                "영등포",
-                "잠실"
-                /* "기타" */
+                "건대"
             ]
         },
         {
@@ -32,116 +27,71 @@ const AreaList = () => {
                 "안양",               
                 "기타"
             ]
-        },
-        {
-            id: 2,
-            name: "인천",
-            subArea : [
-                "전체"                
-            ]
-        },
-        {
-            id: 3,
-            name: "충청",
-            subArea : [
-                "전체",
-                "대전",
-                "천안",
-                "청주",
-                "기타"                
-            ]
-        },
-        {
-            id: 4,
-            name: "경상",
-            subArea : [
-                "전체",
-                "대구",
-                "부산",               
-                "기타"                
-            ]
-        },
-        {
-            id: 5,
-            name: "전라",
-            subArea : [
-                "전체",
-                "광주",
-                "전주",               
-                "기타"                
-            ]
-        },
-        {
-            id: 6,
-            name: "강원",
-            subArea : [
-                "전체"                                
-            ]
-
-        },
-        {
-            id: 7,
-            name: "제주",
-            subArea : [
-                "전체"                                
-            ]
-            
         }
     ]
+
     const dispatch = useDispatch();
 
     const [showOption , setShowOption] = useState(false);
     const [areaBorderOn , setAreaBorderOn] = useState(false);
     const toggleBtn = () => {
         setShowOption(!showOption);
-        setAreaBorderOn(!areaBorderOn)
+        setAreaBorderOn(!areaBorderOn);
     }
 
- /*    const [subAreaList, setSubAreaList] = useState([]); */
+    const [areaName, setAreaName] = useState(areaList[0].name);
+    const [subAreaName , setSubAreaName] = useState(areaList[0].subArea[0])
     const [subAreaList, setSubAreaList] = useState(areaList[0].subArea);
-    const [btnAreaName, setBtnAreaName] = useState(areaList[0].name);
+    const [subAreaTextColor , setSubAreaTextColor] = useState(0)
+
+    useEffect(() => {
+        dispatch({type:"AREA_SELECT" , payload:{areaName}})
+        dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName}})
+    },[])
+
     const areaCheck = (e) => {
-        let idx = e.target.id
-        let filteredArea = areaList.find(item => item.id == idx);
+        let targetId = e.target.id
+        let filteredArea = areaList.find(item => item.id == targetId);
 
-        setSubAreaList([...filteredArea.subArea])
+        let targetText = e.target.innerText
+        setAreaName(targetText)
 
-        let areaNameText = e.target.innerText
-        setBtnAreaName(areaNameText)
-        dispatch({type:"AREA_SELECT" , payload:{areaNameText}})
-        
         setShowOption(!showOption);
+        setAreaBorderOn(!areaBorderOn)
+        setSubAreaTextColor(0)
+        setSubAreaList([...filteredArea.subArea])
+        
+
+        dispatch({type:"AREA_SELECT" , payload:{areaName:targetText}})
+        dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName:areaList[0].subArea[0]}})
+        dispatch({type:"GENRE_SELECT" , payload:{genreName:'전체'}})
     }
 
-  
-    /* const [subAreaName , setSubAreaName] = useState('') */
-    const [subAreaTextColor , setSubAreaTextColor] = useState('#777777')
+    let genreName = useSelector(state => state.genreName)
 
     const subAreaCheck = (e) => {
         e.preventDefault();
-        let subAreaName = e.target.innerText
+        let targetText = e.target.innerText
+        setSubAreaName(targetText)
+        setSubAreaTextColor(e.target.value)
 
-        /* setSubAreaName(subAreaName) */
-    
-        dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName}})
+        dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName:targetText}})
+        dispatch({type:"GENRE_SELECT" , payload:{genreName:genreName}})
     }
 
-  /*   useEffect(() => {
-        dispatch({type:"AREA_SELECT" , payload:{areaName}})
-        dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName}})
-    },[dispatch]) */
-    
+    console.log(genreName)
+
   return (
     <div className="areaSection">
         <div>  
             <div className='areaSelectBox'>
-                <button className={`selectBtn ${areaBorderOn ? '' : 'on'}`} onClick={toggleBtn}>
-                    지역 : {btnAreaName}
+                <button className={`selectBtn ${areaBorderOn ? 'on' : ''}`} onClick={toggleBtn}>
+                    지역 : {areaName}
                 </button>
                 <ul className={`areaOption ${showOption ? '' : 'hide'}`}>
                     {
                         areaList.map(
-                            (item, idx) => <li key={idx}><button onClick={areaCheck} id={idx}>{item.name}</button></li>
+                            (item, idx) => <li key={idx} onClick={areaCheck} id={idx}>{item.name}</li>
                         )
                     }
                 </ul>
@@ -149,8 +99,8 @@ const AreaList = () => {
     
             <ul className="subAreaList">
                 {
-                    subAreaList.map(
-                        (list, idx) => <li  onClick={subAreaCheck} key={idx} >{list}</li>
+                    subAreaList.map((list, idx) =>
+                        <li className={`${subAreaTextColor == idx ? 'on' : ''}`} onClick={subAreaCheck} key={idx} value={idx}> {list} </li>
                     )
                 }
             </ul>
