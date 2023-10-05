@@ -14,6 +14,14 @@ const ProductModal = ({item , hideModal , prodList}) => {
         hideModal(false)
     }
 
+    const [theme , setTheme] =useState()
+    const postItem = (list) => {
+        setTheme(list)
+    }
+    if(theme) {
+        item = theme
+    }
+
     let dispatch = useDispatch()
     let cardLike = useSelector(state => state.cardLike)
     let cardItemId = useSelector(state => state.cardItemId)  
@@ -34,10 +42,10 @@ const ProductModal = ({item , hideModal , prodList}) => {
     }
 
     return (
-        <div className='itemDetail'>              
-            <div className="itemBg" onClick={modalClose}/>
-            <div className="itemWrap">             
-                <div className='itemInfo'>  
+        <div className='prodModalWrap'>              
+            <div className="modalBg" onClick={modalClose}/>
+            <div className="modalDetail">             
+                <div className='prodInfo'>  
                     <h2>상세정보</h2>
                     <section className="topInfoSec">                
                         <div className='imgArea'>
@@ -80,7 +88,7 @@ const ProductModal = ({item , hideModal , prodList}) => {
                             <li className='storeInfo'>매장</li>
                             <li className='review'>리뷰</li>
                         </ul>
-                        <StoreInfo item={item} prodList={prodList}/>
+                        <StoreInfo item={item} prodList={prodList} postItem={postItem} />
                         {/* <Review />   */}          
                        
                     </section>

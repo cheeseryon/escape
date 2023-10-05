@@ -30,9 +30,9 @@ const ProductCard = ({item , getItem}) => {
   }
   
   return (
-    <div className='themeItem'>
+    <div className='prodCardWrap'>
       <div className={`like ${cardLike ? 'on' : ''}`} onClick={likeClick}/>
-      <div className="itemWrap" onClick={postItem}>
+      <div className="prodCardItem" onClick={postItem}>
         <div className="imgBox">
           <img src={item?.img} alt="" />
         </div>

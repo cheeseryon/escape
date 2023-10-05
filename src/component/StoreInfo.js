@@ -1,40 +1,53 @@
 import React , { useState , useEffect }from 'react'
+/* import { Navigation, Pagination, Scrollbar } from 'swiper'; */
+import { Swiper, SwiperSlide } from 'swiper/react';
 import ProductCard from './ProductCard'
 
-const StoreInfo = ({item , prodList}) => {
-    console.log(prodList)
+import 'swiper/css';
+import 'swiper/css/navigation';
 
+import { Navigation,Keyboard, } from 'swiper/modules';
+
+const StoreInfo = ({item , prodList , postItem}) => {
+    console.log(prodList)
+    
+
+    const getItem = (theme) => {
+        postItem(theme)
+    }
+    /* console.log(theme) */
     const [storeTheme , setStoreTheme ] = useState([])
     let fiteredTheme = prodList.filter((theme) => 
         theme.store.includes(item.store) && 
         theme.title !== item.title
     )
-
-
     useEffect(() => {
         setStoreTheme(fiteredTheme)
-    },[])
-    
-    
-
-    console.log(storeTheme)
+    },[postItem])
 
     return (
-        <div>
+        <div className="storeInfoWrap">
             <div className="storeName">
-                <span>{item?.store}</span>
-                <span>홈페이지 방문</span>
+                <p>{item?.store}</p>
+                <p>주소 : </p>
             </div>
-            <div>
-                <p>매장의 다른테마</p>
-                <ul>
+            <div className='storeThemeList'>
+                       <p>매장의 다른테마</p> 
+                <Swiper
+                    cssMode={true}
+                    navigation={true}
+                    keyboard={true}
+                    mousewheel={false}
+                    modules={[Navigation , Keyboard]}
+                    className="mySwiper"
+                >
+               
                     {
                         storeTheme.map((menu , idx) => (
-                            <ProductCard item={menu} key={idx}/>
+                            <SwiperSlide className="storeThemeItem"><ProductCard item={menu} key={idx} getItem={getItem}/></SwiperSlide>
                         ))
                     }
-                
-                </ul>
+                </Swiper>
             </div>
         </div>
     )

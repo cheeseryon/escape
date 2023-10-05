@@ -79,7 +79,7 @@ const AreaList = () => {
         dispatch({type:"GENRE_SELECT" , payload:{genreName:genreName}})
     }
 
-    console.log(genreName)
+    /* console.log(genreName) */
 
   return (
     <div className="areaSection">

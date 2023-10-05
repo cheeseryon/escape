@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import PrivateRoute from './route/PrivateRoute';
 import ProductAll from './page/ProductAll';
 import LoginPage from './page/LoginPage';
+import Navbar from './component/Navbar';
+import AreaList from './component/AreaList';
 import ProductModal from './component/ProductModal';
 
 /* import UserPage from './page/UserPage'; */

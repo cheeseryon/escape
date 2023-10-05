@@ -6,6 +6,7 @@ import AreaList from '../component/AreaList'
 import { useSelector } from 'react-redux';
 import Navbar from '../component/Navbar';
 import ProductModal from '../component/ProductModal';
+import dataBase from '../db/db.json'
 
 const ProductAll = () => {
     const [topInnerBoder , setTopInnerBoder] = useState(false);
@@ -15,11 +16,12 @@ const ProductAll = () => {
 
     const getProducts = async () => {
         let searchQuery = query.get('q') || '';
-        /* let url = `http://localhost:4004/products?q=${searchQuery}`; */
+        /* let url = `http://localhost:4004/products?q=${searchQuery}`;
         let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
         let response = await fetch(url);
         let data = await response.json();
-
+        console.log(data) */
+        let data = dataBase.products
         let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
 
         if((query.get('q'))) {
@@ -32,16 +34,10 @@ const ProductAll = () => {
       getProducts();
     }, [query]);
 
-
     let areaName = useSelector(state => state.areaName)
     let subAreaName = useSelector(state => state.subAreaName)
     let genreName = useSelector(state => state.genreName)
     const [filteredProduct , setfilteredProduct] = useState([]);
-    //console.log(query.get('q'))
-    //console.log(areaName)
-    //console.log(subAreaName)
-    //console.log(genreName)
-    //console.log(genreName.genreName)
     const filteredArea = prodList.filter((item) => item.area.includes(areaName));
     const filteredGenre = filteredArea.filter((item) => 
       item.subArea.includes(subAreaName) && item.genre.includes(genreName)
@@ -72,15 +68,22 @@ const ProductAll = () => {
       window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     }
 
+    const [scroll , setScroll] = useState()
+   /*  useEffect(() => {
+      window.addEventListener('scroll', scrollEvent);
+      return () => {
+        window.removeEventListener('scroll', scrollEvent); //clean up
+      };
+    }, []);
 
-    useEffect(()=>{
-      console.log(window.scrollY)
-    })
+    const scrollEvent = () => {
+      window.scrollY > 50 ? setScroll(true) : setScroll(false)
+    } */                                            
     
   return (
     <div className='prodListBox'>
       <Navbar />
-      <div className={`topInnerWrap ${window.scrollY > 0 ? 'scrollOn' : ''}`}>
+      <div className={`topInnerWrap ${scroll ? 'on' : ''}`}>
         <div className="inner">           
           <AreaList />
           <GenreList />
