@@ -34,7 +34,7 @@ const ProductAll = () => {
     };
     useEffect(() => {
       getProducts();
-    }, [query]);
+    }, [query ,  data]);
 
     let areaName = useSelector(state => state.areaName)
     let subAreaName = useSelector(state => state.subAreaName)
@@ -70,7 +70,7 @@ const ProductAll = () => {
       window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     }
 
-
+    
     const themeAscending = () => {
       let alignData = [...dataBase.products]
       alignData.sort(function (a, b) {
@@ -81,8 +81,24 @@ const ProductAll = () => {
 
     const themeDescending = () => {
       let alignData = [...dataBase.products]
-      alignData.sort(function (a, b) {
+      alignData.sort((a, b) => {
         return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
+      })
+      setData(alignData)
+    }
+
+    const difficultyAscending = () => {
+      let alignData = [...dataBase.products]
+      alignData.sort((a,b) => {
+        return a.difficulty < b.difficulty ? -1 : a.difficulty > b.difficulty ? 1 : 0 ;
+      })
+      setData(alignData)
+    }
+
+    const difficultyDescending = () => {
+      let alignData = [...dataBase.products]
+      alignData.sort((a,b) => {
+        return a.difficulty > b.difficulty ? -1 : a.difficulty < b.difficulty ? 1 : 0;
       })
       setData(alignData)
     }
@@ -98,8 +114,10 @@ const ProductAll = () => {
           <div className='filter'>
             <div>정렬하기</div>
             <ul>
-              <li onClick={themeAscending}  >테마명 오름차순</li>
-              <li onClick={themeDescending}  >테마명 내림차순</li>
+              <li onClick={themeAscending}>테마명 오름차순</li>
+              <li onClick={themeDescending}>테마명 내림차순</li>
+              <li onClick={difficultyAscending}>난이도 오름차순</li>
+              <li onClick={difficultyDescending}>난이도 내림차순</li>
             </ul>
           </div>
 
@@ -122,7 +140,6 @@ const ProductAll = () => {
           {
             showModal? <ProductModal item={modalItem} prodList={prodList} hideModal={hideModal}/> : null
           }
-      
     </div>
   );
 }
