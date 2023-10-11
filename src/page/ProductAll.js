@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux';
 import Navbar from '../component/Navbar';
 import ProductModal from '../component/ProductModal';
 import dataBase from '../db/db.json'
+import '../App.css'
 
 const ProductAll = () => {
-    const [topInnerBoder , setTopInnerBoder] = useState(false);
-    
     const [prodList, setProductList] = useState([]);
     const [query, setQuery] = useSearchParams();
+    const [data , setData] = useState(dataBase.products)
 
     const getProducts = async () => {
         let searchQuery = query.get('q') || '';
@@ -21,7 +21,9 @@ const ProductAll = () => {
         let response = await fetch(url);
         let data = await response.json();
         console.log(data) */
-        let data = dataBase.products
+
+        /* let data = dataBase.products */
+
         let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
 
         if((query.get('q'))) {
@@ -68,28 +70,39 @@ const ProductAll = () => {
       window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     }
 
-    const [scroll , setScroll] = useState()
-   /*  useEffect(() => {
-      window.addEventListener('scroll', scrollEvent);
-      return () => {
-        window.removeEventListener('scroll', scrollEvent); //clean up
-      };
-    }, []);
 
-    const scrollEvent = () => {
-      window.scrollY > 50 ? setScroll(true) : setScroll(false)
-    } */                                            
+    const themeAscending = () => {
+      let alignData = [...dataBase.products]
+      alignData.sort(function (a, b) {
+        return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
+      })
+      setData(alignData)
+    }
+
+    const themeDescending = () => {
+      let alignData = [...dataBase.products]
+      alignData.sort(function (a, b) {
+        return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
+      })
+      setData(alignData)
+    }
     
   return (
     <div className='prodListBox'>
       <Navbar />
-      <div className={`topInnerWrap ${scroll ? 'on' : ''}`}>
+      <div className="topInnerWrap">
         <div className="inner">           
           <AreaList />
           <GenreList />
+
           <div className='filter'>
-            
+            <div>정렬하기</div>
+            <ul>
+              <li onClick={themeAscending}  >테마명 오름차순</li>
+              <li onClick={themeDescending}  >테마명 내림차순</li>
+            </ul>
           </div>
+
         </div>
       </div>
 
@@ -97,9 +110,9 @@ const ProductAll = () => {
         <div className="themeList">
           {
             filteredGenre.length > 0 ? 
-              filteredProduct.map((menu, idx) => (
+              filteredProduct.map((menu, pAIdx) => (
                 <div className="listWrap">
-                  <ProductCard item={menu} key={idx} onClick={getItem} getItem={getItem} />
+                  <ProductCard item={menu} key={pAIdx} onClick={getItem} getItem={getItem} />
                 </div>
               )) 
             : <p className='failedMassage'>해당 조건의 테마가 없습니다</p>
