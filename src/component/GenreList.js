@@ -19,10 +19,10 @@ const GenreList = () => {
     const [ genreTextColor , setGenreTextColor] = useState(0)
 
     useEffect(()=> {
-        dispatch({type:"GENRE_SELECT" , payload:{genreName}})
+        dispatch({type:"GENRE_SELECT" , payload:{genreName}}) //첫 렌더링시 장르 전체를 보여주기 위함
     },[dispatch])
 
-    let areaName = useSelector(state => state.areaName)
+    let areaName = useSelector(state => state.areaName) //메인지역(서울,)
 
     const genreCheck = (e) => {
         e.preventDefault()
@@ -39,15 +39,15 @@ const GenreList = () => {
 
   return (
     <div className="genreList">
-
-            <ul>{
-                    genre.map((list, idx) =>
-                    <li className={`${genreTextColor == idx ? 'on' : ''}`} onClick={genreCheck} key={idx} value={idx}>
-                        {list}
-                    </li>
-                )}
-            </ul>
-
+      <ul>
+        <li>장르</li>
+          {
+            genre.map((list, idx) =>
+            <li className={`${genreTextColor == idx ? 'on' : ''}`} onClick={genreCheck} key={idx} value={idx}>
+                {list}
+            </li>
+          )}
+      </ul>
     </div>
   )
 }

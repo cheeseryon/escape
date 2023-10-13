@@ -5,20 +5,10 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 
-
-
 const Navbar = ({authenticate, setAuthenticate}, props) => {
-  /* 네비게이션 메뉴바 영역을 배열로 처리 -> 메뉴의 확장성 */
-  const menuList = [
-    "테마정보",
-    "매장정보" 
-  ]
-
-  let [width, setWidth] = useState();
-
     const navigate = useNavigate();
     const goToLogin = () => {
-        navigate('/login')
+        navigate('/myPage')
     }
 
     let search = (e) => {
@@ -71,18 +61,15 @@ const Navbar = ({authenticate, setAuthenticate}, props) => {
           <div className="logo" onClick={goHome} style={{cursor:'pointer'}}>또!방탈출</div>
 
           <div className="gnb">
-            <ul className="gnbList">
-              {
-                menuList.map(
-                  (menu, idx) => <li key={idx}><a href="#">{menu}</a></li>
-                )
-              }
+            <ul className="gnbList">          
+              <li onClick={goHome}>테마정보</li>
+              <li>매장정보</li>
             </ul>
           </div>   
 
           <div className="util">
             <div className='searchArea'>
-              <input type="text" className="searchBox" placeholder="테마/매장 검색" onKeyDown={(e)=> search(e)}/>
+              <input type="text" className="searchBox" placeholder="테마 검색" onKeyDown={(e)=> search(e)}/>
               <FontAwesomeIcon icon={faSearch} className='searchIcon'/>
             </div>
             <div className="myPage">

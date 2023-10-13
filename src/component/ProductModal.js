@@ -6,10 +6,9 @@ import star from '../img/star.png'
 import xIcon from '../img/xIcon.png'
 import storeIcon from '../img/store.png'
 import closeIcon from '../img/close.png'
-import Review from './Review';
 import StoreInfo from './StoreInfo';
 
-const ProductModal = ({item , hideModal , prodList}) => {
+const ProductModal = ({item , hideModal}) => {
     const modalClose = () => {
         hideModal(false)
     }
@@ -23,23 +22,23 @@ const ProductModal = ({item , hideModal , prodList}) => {
     }
 
     let dispatch = useDispatch()
-    let cardLike = useSelector(state => state.cardLike)
-    let cardItemId = useSelector(state => state.cardItemId)  
+    let likeId = useSelector(state => state.likeId)  
 
-    const [modalLike , setModalLike ] = useState(false)
-
+    const [modalLike , setModalLike ] = useState()
     useEffect(() => {
-        if (item.id === cardItemId) {
-            setModalLike(cardLike)
+        if(likeId.includes(item.id)) {
+            setModalLike(true)
+        } else {
+            setModalLike(false)
         }
-    }, [cardLike]);
+    }, [likeId , postItem]);
 
     let modalItemId = item.id
     const likeClick = () => {
-        setModalLike(!modalLike)
-        dispatch ({type:"MODAL_LIKE" , payload:{modalLike:!modalLike}})
+        dispatch ({type:"MODAL_LIKE" , payload:''})
         dispatch ({type:"MODAL_ID" , payload:{modalItemId}})
     }
+    console.log(likeId)
 
     return (
         <div className='prodModalWrap'>              
@@ -71,7 +70,7 @@ const ProductModal = ({item , hideModal , prodList}) => {
                                 <h4>테마 설명</h4>
                                 <p className='themeInfoText'>
                                 {
-                                    item?.info.split('\n').map((text, index) => (
+                                    item?.story.split('\n').map((text, index) => (
                                     <React.Fragment key={index}>
                                         {text}
                                         <br />
@@ -88,21 +87,17 @@ const ProductModal = ({item , hideModal , prodList}) => {
                             <li className='storeInfo'>매장</li>
                             <li className='review'>리뷰</li>
                         </ul>
-                        <StoreInfo item={item} prodList={prodList} postItem={postItem} />
+                        <StoreInfo item={item} postItem={postItem} />
                         {/* <Review />   */}          
                        
                     </section>
                 </div>
 
                 <div className='btnArea'>
-                    <span className={`like ${modalLike ? 'on' : ''}`} onClick={likeClick}><span /></span>
-                    <span className='storeLink'><img src={storeIcon}></img></span>
+                    <span className={`like ${modalLike == true ? 'on' : ''}`} onClick={likeClick}><span /></span>
                     <span className='modalCloseBtn' onClick={modalClose}><img src={closeIcon}></img></span>
                 </div>
             </div> 
-
-
-             
         </div>
     )
 }

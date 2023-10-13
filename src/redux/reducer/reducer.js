@@ -2,16 +2,11 @@ const initialState = {
     areaName: '',
     subAreaName: '',
     genreName: '',
-    modalLike: '',
-    modalItemId:'',
-    cardLike:'',
-    cardItemId:''
+    likeToggle:'false',
+    likeId:[]
 };
-const initialText = '전체'
-
 function reducer(state = initialState, action) {
     const { type, payload } = action;
-    
 
     switch (type) {
         case "GENRE_SELECT":   
@@ -19,7 +14,6 @@ function reducer(state = initialState, action) {
                 ...state,
                 genreName: payload.genreName,
             }
-        
         case "AREA_SELECT":
             return {
                 ...state,
@@ -27,35 +21,49 @@ function reducer(state = initialState, action) {
                 subAreaName: '',
                 genreName: ''
             }
-
         case "SUBAREA_SELECT":  
             return {               
                 ...state,
                 subAreaName: payload.subAreaName,
             }
-
         case "MODAL_LIKE":
             return {
                 ...state,
-                modalLike : payload.modalLike
+                likeToggle: (state.likeToggle == false) ? true : false
             }
-        
         case "MODAL_ID":
+            const uddateModalItemId = state.likeId.includes(payload.modalItemId)
+                ? state.likeId.filter(id => id !== payload.modalItemId)
+                : [...state.likeId, payload.modalItemId]
             return {
                 ...state,
-                modalItemId : payload.modalItemId
+                likeId : uddateModalItemId
             }
-
         case "CARD_LIKE":
             return {
                 ...state,
-                cardLike : payload.cardLike
-            }
-        
+                likeToggle: (state.likeToggle == false) ? true : false
+            };
         case "CARD_ID":
+            const updateCardItemId = state.likeId.includes(payload.cardItemId)
+                ? state.likeId.filter(id => id !== payload.cardItemId)
+                : [...state.likeId, payload.cardItemId];
+        
             return {
                 ...state,
-                cardItemId : payload.cardItemId
+                likeId: updateCardItemId
+            };
+
+        case "LIKE_ID_REMOVE":
+            const updateLikeIdRemove = state.likeId.includes(payload.removeId)
+                ? state.likeId.filter(id => id !== payload.removeId)
+                : [...state.likeId, payload.removeId]
+
+                console.log(payload.removeId)
+                console.log(state.likeId)
+            return {
+                ...state,
+                likeId: updateLikeIdRemove
             }
 
         default:

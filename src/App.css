@@ -1,472 +1,224 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css");
-
+@import url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css); 
 body {overflow-y:scroll;}
-div#root { font-family: 'pretendard', sans-serif; color: #333(255,255,255,0.7); font-weight: 500; }
-
-* {box-sizing: border-box;}
-li {list-style: none;}
-.inner {width:1720px; margin: 0 auto; height:100%;}
+div#root {font-family:pretendard, sans-serif; color:#333(255,255,255,0.7); font-weight: 500;}
+* {box-sizing:border-box;}
+ul {margin:0; padding:0;}
+li {list-style:none;}
+.inner {width:1720px; height:100%; margin:0 auto;}
 .hide {display:none;}
 
-/* component */
-  /* navBar */
-.head {
-  position:fixed;
-  left:0; top:0;
-  width:100%;
-  height:80px;
-  border-bottom: 1px solid #e2e2e2;
-  background: #fff;
-  z-index:100
-}
-.head .inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  text-align: center;
-}
-.head .logo {
-  width:100px;
-  font-size:24px;
-  font-weight: 700;
-  color:#2969c9;
-}
-.head .gnb {display: flex; align-items: center; height:100%;}
-.head .gnb .gnbList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height:50px;
-  padding: 0;
-  margin:0;
-  border: 1px solid #e0e0e0;
-  border-radius: 30px;
-  box-shadow: 0 3px 10px #dfdfdf;
-  overflow:hidden;
-}
-.head .gnb .gnbList li a {
-  display: block;
-  padding: 0 15px;
-  font-size:16px;
-  font-weight: 700;
-  line-height: 50px;
-  text-decoration: none;
-  color:#2969c9;
-  transition: 0.2s;
-}
-.head .gnb .gnbList li a:hover {background: #f1f1f1;}
-.head .gnb .gnbList li:nth-child(1) a {padding-left: 28px;}
-.head .gnb .gnbList li:nth-child(2) a {position:relative; padding-right: 28px;}
-.head .gnb .gnbList li:nth-child(2) a::after{
-  content:'';
-  position:absolute;
-  top:50%; left:0;
-  transform: translateY(-50%);
-  display:block;
-  width:1px;
-  height: 24px;
-  background: #d3d3d3;
-}
-
-.head .util {display:flex; justify-content: end;width:100px;}
-.head .util > div {display:flex; align-items: center;}
-.head .util .searchArea {position:relative; margin-right:20px;/*  z-index:10 */}
-.head .util .searchArea .searchBox {
-  position:absolute;
-  top:-10px; left:-150px;
-  width:180px;
-  height:44px;
-  padding:0 0 0 15px;
-  margin:0;
-  border:none;
-  border-bottom:2px solid #999;
-  outline: none;
-  font-size:14px;
-}
-.head .util .searchArea .searchIcon {
-  width:22px;
-  height:22px;
-  background: #fff;
-  z-index:10;
-  cursor:pointer
-}
+/* 컴포넌트 navBar */
+.head {position:fixed; left:0; top:0; width:100%; height:80px; border-bottom:1px solid #e2e2e2; background:#fff; z-index:100;}
+.head .inner {display:flex; justify-content:space-between; align-items:center; height:100%; text-align:center;}
+.head .logo {width:100px; font-size:24px; font-weight:700; color:#2969c9;}
+.head .gnb {display:flex; align-items:center; height:100%;}
+.head .gnb .gnbList {display:flex; justify-content:center; align-items:center; height:50px; border:1px solid #e0e0e0;
+                    border-radius:30px; box-shadow:0 3px 10px #dfdfdf; overflow:hidden; margin:0; padding:0;}
+.head .gnb .gnbList li {display:block;font-weight:700; line-height:50px; text-decoration:none; color:#2969c9; transition:.2s; padding:0 15px; cursor:pointer} 
+.head .gnb .gnbList li:hover {background:#f1f1f1;}
+.head .gnb .gnbList li:nth-child(1) {padding-left:28px;}
+.head .gnb .gnbList li:nth-child(2) {position:relative; padding-right:28px;}
+.head .gnb .gnbList li:nth-child(2)::after {content:''; position:absolute; top:50%; left:0; transform:translateY(-50%); display:block; width:1px; height:24px; background:#d3d3d3;}
+.head .util {display:flex; justify-content:end; width:100px;}
+.head .util > div {display:flex; align-items:center;}
+.head .util .searchArea {position:relative; margin-right:20px;}
+.head .util .searchArea .searchBox {position:absolute; top:-10px; left:-150px; width:180px; height:44px; border:none; border-bottom:2px solid #999; outline:none; font-size:14px; margin:0; padding:0 0 0 15px;}
+.head .util .searchArea .searchIcon {width:22px; height:22px; background:#fff; z-index:10; cursor:pointer;}
 .head .util .myPage .userIcon {width:24px; height:24px;}
 
 
-  /* AreaList */
-.areaSection {position:relative; width:50%; height:70px;}
-.areaSection:before{
-position:absolute;
-  top:50%; right:0%;
-  transform: translate(60%,-50%);
-  display:block;
-  content:'!';
-  color: #2969c9;
-  font-size:42px;
-}
-.areaSection > div {display:flex; justify-content: start; height:100%;}
-.areaSection button {padding:0; margin:0; border:none; outline:none; background:none;}
-.areaSection .areaSelectBox {position:relative; width:110px; height:100%;}
-.areaSection .areaSelectBox .selectBtn{
-  position:relative;
-  top:10px;
-  width:100%;
-  height:50px;
-  border:1px solid #e2e2e2;
-  border-radius:10px;
-  font-family: 'pretendard', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-}
+/* 컴포넌트 areaList*/
+.areaSection {position:relative; width:50%; height:60px;}
+.areaSection:before {position:absolute; top:50%; right:0; transform:translate(60%,-50%); display:block; content:'!'; color:#2969c9; font-size:42px;}
+.areaSection > div {display:flex; justify-content:start; height:100%;}
+.areaSection button {border:none; outline:none; background:none; margin:0; padding:0;}
+
+.areaSection .areaSelectBox {position:relative; width:100px; height:100%;}
+.areaSection .areaSelectBox .selectBtn {position:relative; top:7px; width:100%; height:44px; border:1px solid #e2e2e2; border-radius:10px; font-family:pretendard, sans-serif; font-size:16px; font-weight:600;}
 .areaSection .areaSelectBox .selectBtn.on {border:1px solid #2969c9;}
-.areaSection .areaSelectBox .areaOption {
-  position:absolute;
-  top:62px; left:0;
-  width:100%;
-  padding:0;
-  margin: 6px 0 0;
-  border:1px solid #2969c9;
-  border-radius:10px;
-  background: #fff;
-  overflow:hidden;
-  z-index:50;
-}
-.areaSection .areaSelectBox .areaOption li {
-  width:100%;
-  height:40px;
-  line-height: 40px;
-  font-size:16px;
-  font-weight: 600;
-  transition: 0.1s;
-  text-align:center;
-  cursor:pointer;
-}
-.areaSection .areaSelectBox .areaOption li:hover {background: #f1f1f1;}
-.areaSection .areaSelectBox .areaOption li.on {color:#fff; background: #2969c9;}  
-.areaSection .subAreaList {
-  display:flex;
-  justify-content: start;
-  margin: 0 0 0 10px;
-  padding: 0;
-}
-.areaSection .subAreaList li {
-  position:relative;
-  display:block;
-  width:70px;
-  line-height: 70px;
-  font-size: 17px;
-  font-weight: 600;
-  color:#777777;
-  text-decoration: none;
-  text-align: center;
-  transition: 0.2s;
-  cursor:pointer
-}
-.areaSection .subAreaList li:hover {color:#2969c9}
-.areaSection .subAreaList li.on {color:#2969c9; font-weight: 700;}
-
-/* genre */
-.genreList {width:50%; height:100%; padding-left:40px;}
-.genreList  ul {
-  display:flex;
-  justify-content: start;
-  width:100%;
-  margin: 0 auto;
-  padding: 0;
-}
-.genreList ul li {
-  display:block;
-  width:72px;
-  font-size: 17px;
-  font-weight: 600;
-  color:#777777;
-  line-height: 70px;
-  text-align: center;
-  cursor:pointer;
-}
-.genreList ul li:hover {color:#2969c9}
-.genreList ul li.on {color:#2969c9; font-weight:700;}
-
-/* ProductCard */
-.prodCardWrap {
-  position:relative;
-  width:100%;
-  height:100%;
-  border:1px solid transparent;
-  border-radius:10px;
-  transition:0.2s
-}
-.prodCardWrap:hover {
-  border:1px solid #ebebeb;
-  box-shadow: 6px 6px 10px #e6e6e6;
-  transform:scale(1.02)
-}
-.prodCardWrap .like {
-  position:absolute;
-  top: 10px; right: 10px;
-  width:24px;
-  height:24px;
-  background:url(../public/img/likeOff.png) no-repeat center/cover;
-  cursor:pointer;
-  transition: 0.1s;
-  z-index:30;
-  opacity:0.8;
-}
-.prodCardWrap .like.on {
-  background:url(../public/img/likeOn.png) no-repeat center/cover;
-  opacity:1;
-}
-.prodCardWrap .prodCardItem {height:100%}
-.prodCardWrap .imgBox {
-  width:100%;
-  height:70%;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.prodCardWrap .imgBox img {display:block; width:100%; height:100%; transition: 0.3s}
-.prodCardWrap .text {height:30%; padding:10px 10px 0;}
-.prodCardWrap .text > div {height:24px; line-height:24px;}
-.prodCardWrap .title {
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  font-size:17px;
-  font-weight: 700;
-}
-.prodCardWrap .genre {font-size:16px; font-weight: 500;}
-.prodCardWrap .store {font-size:15px; color:#666;}
-.prodCardWrap .evaluation {display:flex; justify-content: space-between; align-items: center; font-size:15px;}
-
-.evaluation p {display:flex; justify-content: space-between; align-items: center;}
-.evaluation span {display:block;}
-.evaluation span img {display:block;}
-.evaluation .difficulty{width:50px;}
-.evaluation .difficulty .keyIcon img {width:24px; height:24px;}
-.evaluation .difficulty .xIcon img  {position:relative; top:2px; width:10px; height:10px;}
-.evaluation .score {width:44px}
-.evaluation .score .starIcon img{width:16px; height:16px;}
-.evaluation .xIcon .num { width:10px; height:10px;}
+.areaSection .areaSelectBox .areaOption {position:absolute; top:62px; left:0; width:100%; border:1px solid #2969c9; border-radius:10px; background:#fff; overflow:hidden; z-index:50; margin:6px 0 0; padding:0;}
+.areaSection .areaSelectBox .areaOption li {width:100%; height:40px; line-height:40px;font-weight:600; transition:.1s; text-align:center; cursor:pointer;}
+.areaSection .areaSelectBox .areaOption li.on {color:#fff; background:#2969c9;}
+.areaSection .areaSelectBox .areaOption li:hover {background:#f1f1f1;}
+.areaSection .subAreaList {display:flex; justify-content:start; margin:0 0 0 10px; padding:0;}
+.areaSection .subAreaList li {position:relative; display:block; width:70px; line-height:60px; font-size:17px; font-weight:600; color:#777; text-decoration:none; text-align:center; transition:.2s; cursor:pointer;}
+.areaSection .subAreaList li:hover {color:#2969c9;}
+.areaSection .subAreaList li.on {color:#2969c9; font-weight:700;}
 
 
-/* prodModal */
-.prodModalWrap {
-  position:fixed;
-  top:0; left:0;
-  width:100vw; 
-  height:100vh;
-  margin:0 auto;
-  z-index: 100;
-}
-.prodModalWrap .modalBg {
-  position:absolute;
-  width:100%; 
-  height:100%;
-  background: #000;
-  opacity: 0.4;
-}
-.prodModalWrap .modalDetail {
-  position:absolute;
-  top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  width:980px;
-  height:804px;
-  z-index: 100;
-  background: #fff;
-  border-radius: 6px;
-}
-.prodModalWrap .modalDetail .prodInfo{
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height:calc(100% - 16px);
-  padding:0 50px;
-  margin:8px 0;
-  overflow: hidden;
-  background: #fff;
-  overflow-y: scroll;
-}
-.prodModalWrap h2 {
-  padding:16px 0;
-  margin: 0 0 20px 0;
-  border-bottom: 1px solid #e2e2e2;
-  text-align: center;
-  letter-spacing:1px;
-}
-.prodModalWrap .searchIcon,
-.prodModalWrap .searchBox {display:none;}
-/* prodModalWrap > topInfoSec */
-.prodModalWrap .topInfoSec {display:flex; justify-content: space-between;}
-.prodModalWrap .topInfoSec > div {width:50%; height:520px; margin-bottom: 60px;}
-.prodModalWrap .imgArea {padding-right: 30px;}
+/* genreList */
+.genreList {width:50%; height:60px; padding-left:40px;}
+.genreList ul {display:flex; justify-content:start; width:100%; margin:0 auto; padding:0;}
+.genreList ul li {display:block; width:72px; font-size:17px; font-weight:600; color:#777; line-height:60px; text-align:center; cursor:pointer;}
+.genreList ul li:hover {color:#ffc107;}
+.genreList ul li:first-child,
+.genreList ul li.on {color:#ffc107; font-weight:700;}
+
+
+
+/* 컴포넌트 productCard*/
+
+.prodCardWrap {position:relative; width:100%; height:100%; border:1px solid transparent; border-radius:10px; transition:.2s;}
+.prodCardWrap:hover {border:1px solid #ebebeb; box-shadow:6px 6px 10px #e6e6e6; transform:scale(1.02);}
+.prodCardWrap .like {position:absolute; top:10px; right:10px; width:24px; height:24px; background:url(../public/img/likeOff.png) no-repeat center/cover; cursor:pointer; transition:.1s; z-index:30; opacity:0.8;}
+.prodCardWrap .like.on {background:url(../public/img/likeOn.png) no-repeat center/cover; opacity:1;}
+.prodCardWrap .prodCardItem {height:100%;}
+.prodCardWrap .prodCardItem .imgBox {width:100%; height:70%; border-radius:10px; overflow:hidden;}
+.prodCardWrap .prodCardItem .imgBox img {display:block; width:100%; height:100%; transition:.3s;}
+.prodCardWrap .prodCardItem .text {height:30%; color:#333; padding:10px 10px 0;}
+.prodCardWrap .prodCardItem .text > div {height:24px; line-height:24px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.prodCardWrap .prodCardItem .text > div > span {color:#555; margin-right:4px; ;}
+.prodCardWrap .prodCardItem .evaluation {display:flex; justify-content:space-between; align-items:center; font-size:15px;}
+
+
+/* 컴포넌트 productModal*/
+.prodModalWrap {position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:100; margin:0 auto;}
+.prodModalWrap .modalBg {position:absolute; width:100%; height:100%; background:#000; opacity:0.4;}
+.prodModalWrap .modalDetail {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:980px; height:804px; z-index:100; background:#fff; border-radius:6px;}
+.prodModalWrap .modalDetail .prodInfo {position:absolute; top:0; left:0; width:100%; height:788px; overflow:hidden; background:#fff; overflow-y:scroll; margin:8px 0; padding:0 50px;}
+
+.prodModalWrap h2 {border-bottom:1px solid #e2e2e2; text-align:center; letter-spacing:1px; margin:0 0 20px; padding:16px 0;}
+.prodModalWrap .topInfoSec {display:flex; justify-content:space-between;}
+
+.prodModalWrap .topInfoSec > div {width:50%; height:520px; margin-bottom:60px;}
+.prodModalWrap .imgArea {padding-right:30px;}
 .prodModalWrap .imgArea img {width:100%; height:100%; border-radius:4px;}
-.prodModalWrap .textArea {padding: 10px 0 0 30px;}
-.prodModalWrap .textArea p {margin:0 0 10px}
-.prodModalWrap .textArea .title {font-size:26px; font-weight: 700;}
-.prodModalWrap .textArea .genre {font-size:20px; font-weight: 600; }
-.prodModalWrap .textArea .store {font-size:18px; font-weight: 500; color:#666;}
-.prodModalWrap .textArea .evaluation {display:flex; justify-content: start;}
-.prodModalWrap .textArea .evaluation .difficulty {margin-right: 30px;}
-.prodModalWrap .textArea .themeInfo h4 {font-size: 17px; margin:0 0 20px;}
+.prodModalWrap .textArea {padding:10px 0 0 30px;}
+.prodModalWrap .textArea p {margin:0 0 10px;}
+.prodModalWrap .textArea .title {font-size:26px; font-weight:700;}
+.prodModalWrap .textArea .genre {font-size:20px; font-weight:600;}
+.prodModalWrap .textArea .store {font-size:18px;color:#666;}
+.prodModalWrap .textArea .evaluation {display:flex; justify-content:start;}
+.prodModalWrap .textArea .evaluation .difficulty {margin-right:30px;}
+.prodModalWrap .textArea .themeInfo h4 {font-size:17px; margin:0 0 20px;}
 .prodModalWrap .textArea .themeInfo .themeInfoText {line-height:30px;}
-.prodModalWrap .textArea .themeInfo {
-  width:100%;
-  padding: 20px 16px 40px;
-  margin-top: 20px;
-  border-radius:4px;
-  background: #f0f0f0;
-  color:#444;
-}
+.prodModalWrap .textArea .themeInfo {width:100%; margin-top:20px; border-radius:4px; background:#f0f0f0; color:#444; padding:20px 16px 40px;}
 .prodModalWrap .textArea .infoText {font-size:24px;}
-/* .prodModalWrap .bottomInfoSec */
-.prodModalWrap .bottomInfoSec .tabArea {
-  display:flex;
-  padding:0;
-  margin:0;
-  border-bottom:1px solid #d4d4d4;
-}
-.prodModalWrap .tabArea > li {
-  float:left;
-  width:100px;
-  height:55px;
-  border-bottom:2px solid #2969c9;
-  line-height: 55px;
-  text-align:center;
-  color:#888;
-  color:#2969c9;
-  font-size:19px;
-  font-weight: 600;
-  cursor:pointer;
-}
-.prodModalWrap .tabArea > li.on {
-  border-bottom:2px solid #2969c9;
-  color:#2969c9;
-}
 
-/* ProdModal(c) > Review(c) */
-.prodModalWrap .reviewArea .reviewTop {padding:30px 0 40px; border-bottom:1px solid #e2e2e2}
-.reviewArea .reviewTop p {
-  margin: 0;
-  font-size:22px;
-  font-weight:600;
-  line-height:40px;  
-  text-align:center;
-  letter-spacing: 1px;
-}
-.prodModalWrap .reviewArea .reviewTop .starArea {
-  position:relative;
-  left:50%;
-  transform: translateX(-50%);
-  display:flex;
-  justify-content:space-around;
-  width:30%;
-  height:40px;
-  margin: 0;
-  padding:0;
-}
-.prodModalWrap .reviewArea .reviewTop .starArea li {height:100%;}
-.prodModalWrap .reviewArea .reviewTop .starArea li img {width:40px; height:100%;}
+.prodModalWrap .bottomInfoSec .tabArea {display:flex; border-bottom:1px solid #d4d4d4; margin:0; padding:0;}
+.prodModalWrap .tabArea > li {float:left; width:100px; height:55px; border-bottom:2px solid #2969c9; line-height:55px; text-align:center; color:#2969c9; font-size:19px; font-weight:600; cursor:pointer;}
+.prodModalWrap .tabArea > li.on {border-bottom:2px solid #2969c9; color:#2969c9;}
 
-/* .prodModalWrap .bottomInfoSec .reviewArea .reviewBottom */
-.reviewBottom > ul {padding:0; margin-top:40px;}
-.prodModalWrap .reviewItem {padding:0 20px; border-bottom: 1px solid #e2e2e2;}
-.prodModalWrap .reviewItem .userName {height:40px; clear:both;}
-.prodModalWrap .reviewItem .userName > span {
-  float:left;
-  display:inline-block;
-  width:60px;
-  height:100%;
-  margin-right: 8px;
-  line-height: 40px;
-  font-size:18px;
-  font-weight: 600;
-  text-align: center;
-}
-.prodModalWrap .reviewItem .userName .evaluation {
-  position:relative;
-  top:10px;
-  float:left;
-  width: 100px;
-  height:100%;
-  line-height: 40px;
-}
-.prodModalWrap .reviewItem .userName .date {
-  float:right;
-  height:100%;
-  line-height: 40px;
-  color:#777;
-  font-size:14px;
-}
-.prodModalWrap .reviewItem .userName .score {justify-content: space-between; width:100%; padding:0; margin:0;}
-.prodModalWrap .reviewItem .userName .score .starIcon {display: flex; justify-content: space-between; width:140px;}
-.prodModalWrap .reviewItem .userName .score .starIcon img {}
-.prodModalWrap .reviewItem .userThemeInfo {display:flex; margin:4px 0 10px;}
-.prodModalWrap .reviewItem .userThemeInfo > p {
-  display:flex;
-  justify-content: center;
-  padding:6px 14px;
-  margin: 0 10px 0 0;
-  border-radius:15px;
-  font-size:14px;;
-}
-.prodModalWrap .reviewItem .userThemeInfo .successWhether {background:#ffc107;}
-.prodModalWrap .reviewItem .userThemeInfo .leftTime {background-color:lightblue;}
-.prodModalWrap .reviewItem .reviewText {
-  padding: 15px 10px 30px;
-  line-height: 26px;
-}
-/* storeInfo(c) */
+.prodModalWrap .btnArea {position:absolute; bottom:0; right:-64px; display:flex; flex-direction:column; width:50px; text-align:center;}
+.prodModalWrap .btnArea > span {display:flex; justify-content:center; align-items:center; width:100%; height:50px; margin-bottom:10px; border-radius:50%; background-color:#fff; cursor:pointer;}
+.prodModalWrap .btnArea .like span {width:32px; height:32px; background:url(../public/img/likeOff.png) no-repeat center/cover; transition:.1s;}
+.prodModalWrap .btnArea .like.on span {background:url(../public/img/likeOn.png) no-repeat center/cover;}
+.prodModalWrap .btnArea .modalCloseBtn img {width:20px; height:20px; opacity:0.7;}
+.prodModalWrap .btnArea .like img,
+.prodModalWrap .btnArea .storeLink img {width:34px; height:30px;}
+
+
+/* 컴포넌트 storeInfo */
+.swiper-wrapper {height:320px!important;}
 .storeInfoWrap .storeInfo {height:100px;}
-.storeInfoWrap .storeMap > div { width:100%; height:400px;}
-/* storeMap */
-
-/* ProductModal(c) > storeInfo(c) > ProductCard(c) */
 .storeInfoWrap .storeName span {font-size:18px;}
-.storeInfoWrap .storeThemeList {height:360px; padding:10px 20px; background: #f5f5f5;}
-.storeInfoWrap .storeThemeList p {text-align: center;}
-.storeInfoWrap .storeThemeList .storeThemeItem {width:20% !important; height:100%; margin-right:20px;}
-.storeInfoWrap .prodCardWrap {background: #fff; height: 280px;}
-.storeInfoWrap .prodCardWrap .imgBox {height:65%;}
-.storeInfoWrap .prodCardWrap .text {height:35%;}
-.storeInfoWrap .prodCardWrap .text > div {height:20px; line-height:1;}
-.storeInfoWrap .prodCardWrap .text .title {margin:0; font-size:16px;}
-.storeInfoWrap .prodCardWrap .text .genre,
-.storeInfoWrap .prodCardWrap .text .store {font-size:14px;}
+.storeInfoWrap .storeThemeList {height:360px; background:#f5f5f5; padding:10px 20px;}
+.storeInfoWrap .storeThemeList p {text-align:center;}
+.storeInfoWrap .storeThemeList .storeThemeItem {width:20%!important; height:100%; margin-right:20px;}
 
 
-/* swiper */
-.swiper-wrapper {height:320px !important;}
-
-/* productAll Page */
-.prodListBox {margin:180px 0 30px;}
-.prodListBox .topInnerWrap {
-  position:fixed;
-  top:80px; left:0;
-  width:100%;
-  height:70px;
-  border-bottom:1px solid #e2e2e2;
-  background: #fff;
-  z-index:100;
-}
-.prodListBox .topInnerWrap .inner {display:flex; justify-content:space-between; }
-.prodListBox .topInnerWrap .filter {width:200px;}
-.prodListBox .topInnerWrap .filter ul {position: relative;  display: flex; flex-direction: column;}
-.prodListBox .topInnerWrap .filter ul li {cursor:pointer; background: lightcoral; line-height: 50px;}
-
-.prodListBox .inner .themeList{display:flex; justify-content: start; flex-wrap: wrap; margin-left:-34px;} 
-.prodListBox .inner .themeList .listWrap {width:210px; height:370px; margin: 0 0 35px 40px;}
-.prodListBox .inner .themeList .failedMassage {
-  position:absolute;
-  top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  font-size:26px;
-  font-weight: 700;
-  opacity: 0.5;
-}
-
+/* 컴포넌트 map */
 #map {width:100%; height:500px;}
 
 
+/* 컴포넌트 review*/ 
+.reviewArea .reviewTop {border-bottom:1px solid #e2e2e2; padding:30px 0 40px;}
+.reviewArea .reviewTop p {font-size:22px; font-weight:600; line-height:40px; text-align:center; letter-spacing:1px; margin:0;}
+.reviewArea .reviewTop .starArea {position:relative; left:50%; transform:translateX(-50%); display:flex; justify-content:space-around; width:30%; height:40px; margin:0; padding:0;}
+.reviewArea .reviewTop .starArea li {height:100%;}
+.reviewArea .reviewTop .starArea li img {width:40px; height:100%;}
+
+.reviewBottom > ul {margin-top:40px; padding:0;}
+.reviewBottom .reviewItem {border-bottom:1px solid #e2e2e2; padding:0 20px;}
+.reviewBottom .reviewItem .userName {height:40px; clear:both;}
+.reviewBottom .reviewItem .userName > span {float:left; display:inline-block; width:60px; height:100%; margin-right:8px; line-height:40px; font-size:18px; font-weight:600; text-align:center;}
+.reviewBottom .reviewItem .userName .evaluation {position:relative; top:10px; float:left; width:100px; height:100%; line-height:40px;}
+.reviewBottom .reviewItem .userName .date {float:right; height:100%; line-height:40px; color:#777; font-size:14px;}
+.reviewBottom .reviewItem .userName .score {justify-content:space-between; width:100%; margin:0; padding:0;}
+.reviewBottom .reviewItem .userName .score .starIcon {display:flex; justify-content:space-between; width:140px;}
+.reviewBottom .reviewItem .userThemeInfo {display:flex; margin:4px 0 10px;}
+.reviewBottom .reviewItem .userThemeInfo > p {display:flex; justify-content:center; border-radius:15px; font-size:14px; margin:0 10px 0 0; padding:6px 14px;}
+.reviewBottom .reviewItem .userThemeInfo .successWhether {background:#ffc107;}
+.reviewBottom .reviewItem .userThemeInfo .leftTime {background-color:#ADD8E6;}
+.reviewBottom .reviewItem .reviewText {line-height:26px; padding:15px 10px 30px;}
+
+
+/* 컴포넌트 alginment */
+.ailgnArea ul {position:absolute; top:60px; right:0; display:flex; justify-content:center; width:100VW; height:0; border-bottom:0px solid #e2e2e2; background:#fff; transition:0.5s; z-index:-10; overflow:hidden}
+.ailgnArea ul.on {height:150px; border-bottom:1px solid #e2e2e2; z-index:90;}
+
+.ailgnArea ul li {display:flex; justify-content:center; align-items:center; width:50%; text-align:center; opacity:0; transition:0.3s}
+.ailgnArea ul.on li {opacity:1;}
+
+.ailgnArea ul li p {display: flex; justify-content: center; height: 36px;}
+.ailgnArea ul li p > span {display: flex; align-items: center; justify-content: center; width: 80px;margin: 0 10px; border:1px solid #cccccc; border-radius:18px; color:#777; font-size:17px; ; cursor:pointer;}
+.ailgnArea ul li.themeName p > span {width:120px; z-index: 50;}
+.ailgnArea ul li p > span.on {border:1px solid #ffc107; background:#ffc107; color:#fff}
+
+
+.ailgnArea ul li p span img:nth-child(1) {width:30px; height: 30px;}
+.ailgnArea ul li p span img:nth-child(2) {width:14px; height: 14px; margin: 0 4px;}
+
+.ailgnArea .alignBtn {position:absolute; top:0; right:80px; display:flex; justify-content:center; width:50px; height:60px; align-items:center; transition:0.1s; z-index:100}
+.ailgnArea .alignBtn img {width:40px; height:40px;}
+
+
+/* 컴포넌트 공통요소 */
+.evaluation p {display:flex; justify-content:space-between; align-items:center;}
+.evaluation span,
+.evaluation span img {display:block;}
+.evaluation .difficulty {width:50px;}
+.evaluation .difficulty .xIcon img {position:relative; top:2px; width:10px; height:10px;}
+.evaluation .difficulty .keyIcon img {width:24px; height:24px;}
+.evaluation .xIcon .num {width:10px; height:10px;}
+.evaluation .score {width:44px;}
+.evaluation .score .starIcon img {width:16px; height:16px;}
+
+
+
+/* 컴포넌트 storeInfo > 컴포넌트 productCard(re)*/
+.storeInfoWrap .prodCardWrap {background:#fff; height:280px;}
+.storeInfoWrap .prodCardWrap .imgBox {height:65%;}
+.storeInfoWrap .prodCardWrap .text {height:35%;}
+.storeInfoWrap .prodCardWrap .text > div {height:20px; line-height:1;}
+.storeInfoWrap .prodCardWrap .text .title {margin:0; font-size:13px;}
+.storeInfoWrap .prodCardWrap .text .genre,
+.storeInfoWrap .prodCardWrap .text .store {font-size:13px;}
+
+/* 페이지 productAll */
+.productAllPage {margin:170px 0 30px;}
+.productAllPage .topInnerWrap {position:fixed; top:80px; left:0; width:100%; height:60px; border-bottom:1px solid #e2e2e2; background:#fff; z-index:100;}
+.productAllPage .topInnerWrap .inner {position:relative; display:flex; justify-content:space-between;}
+
+
+
+.productAllPage .inner .themeList {display:flex; justify-content:start; flex-wrap:wrap; margin-left:-34px;}
+.productAllPage .inner .themeList .listWrap {width:210px; height:370px; margin:0 0 35px 40px;}
+.productAllPage .inner .themeList .failedMassage {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:26px; font-weight:700; opacity:0.5;}
+
+
+/* 페이지 mypage */
+/* mypage 내의 inner && navBar 수정 */
+.myPage .inner {width:1200px}
+.myPage .head .inner .searchIcon,
+.myPage .head .inner .searchBox {display:none;}
+
+.myPage .wrap {position:relative; top:180px;}
+.myPage .myPageHead {position:fixed; top:80px; left:0; width:100vw; height:60px; border-bottom:1px solid #e2e2e2;}
+.myPage .myPageHead span {display:inline-block; height:100%; line-height:60px; font-size:17px; border-bottom:2px solid transparent}
+.myPage .myPageHead span.on {font-weight:600; border-bottom:2px solid #333;}
+.myPage .myPageCont .likeList {display:flex; justify-content:space-between; flex-wrap:wrap;}
+.myPage .myPageCont .likeTheme {position:relative; display:flex; justify-content:space-between; width:49%; height:240px; margin-bottom:10px; padding:10px; border:1px solid #f1f1f1; border-radius:6px;}
+.myPage .myPageCont .likeTheme .imgBox {width:30%; height:100%; overflow:hidden;}
+.myPage .myPageCont .likeTheme .imgBox img {width:100%; height:100%}
+.myPage .myPageCont .likeTheme .info {width:40%}
+.myPage .myPageCont .likeTheme .info > div {margin-top:10px; font-size:17px}
+.myPage .myPageCont .likeTheme .info > div > span {color:#666; ;}
+.myPage .myPageCont .likeTheme .link {display:flex; justify-content:space-between; align-items:center; width:20%;}
+.myPage .myPageCont .likeTheme .link span {padding:8px 20px; border:1px solid #ffb005; border-radius:10px; background:#ffb005; color:#fff; text-align:center; cursor:pointer; transition:0.1s}
+.myPage .myPageCont .likeTheme .link span:hover {background:#fff; color:#ffb005; ;}
+.myPage .myPageCont .likeTheme .removeBtn {position:absolute; top:10px; right:10px; cursor:pointer}
+.myPage .myPageCont .likeTheme .removeBtn img {width:22px; height:22px; opacity:0.4;}
 
 
 
@@ -478,92 +230,4 @@ position:absolute;
 
 
 
-
-
-
-
-
-
-
-
-
-
-.prodModalWrap .btnArea {
-  position:absolute;
-  bottom:0; right:-64px;
-  display: flex;
-  flex-direction: column;
-  width:50px;
-  text-align: center;
-}
-.prodModalWrap .btnArea > span {
-  display:flex;
-  justify-content: center;
-  align-items: center;
-  width:100%;
-  height:50px;
-  margin-bottom:10px;
-  border-radius: 50%;
-  background-color: #fff;
-  cursor:pointer;
-}
-.prodModalWrap .btnArea .like span {
-  width: 32px;
-  height: 32px;
-  background:url(../public/img/likeOff.png) no-repeat center/cover;
-  transition: 0.1s;
-}
-.prodModalWrap .btnArea .like.on span {background:url(../public/img/likeOn.png) no-repeat center/cover;}
-.prodModalWrap .btnArea .like img {width:34px; height:30px;}
-.prodModalWrap .btnArea .storeLink img {width:34px; height:30px;}
-.prodModalWrap .btnArea .modalCloseBtn img {width:20px; height: 20px; opacity: 0.7;}
-
-
-
-
-
-
-
-
-
-
-
-/* 
-.sideMenu {
-  position:fixed;
-  top:50px; left:0;
-  height:100%;
-  width:280px;
-  overflow: hidden;
-  z-index:2;
-  padding-top: 20px;
-  transition: 0.5s;
-}
-.sideMenu .closeBtn {
-  position:absolute;
-  top:30px; right:0;
-  margin-left: 50px;
-  border:none;
-  background: none;
-}
-.sideMenu .closeBtn img {width:40px;}
-
-.sideMenuList {
-  display:flex;
-  flex-direction:column;
-  margin-top: 100px;
-}
-.sideMenuList li {width:100%;}
-.sideMenuList li a {
-  display:block;
-  line-height: 50px; 
-  text-decoration: none; 
-  text-align: center;
-  transition: all 0.1s;
-}
-.sideMenuList li a:hover {
-  color:#fff;
-  background: #1650ce;
-}
- */
 

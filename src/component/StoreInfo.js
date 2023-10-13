@@ -3,27 +3,23 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation,Keyboard, } from 'swiper/modules';
 import ProductCard from './ProductCard'
 import Map from './Map'
+import dataBase from '../db/db.json'
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-
-const {kakao} = window
-
-const StoreInfo = ({item , prodList , postItem}) => {
+const StoreInfo = ({item , postItem}) => {
     const getItem = (theme) => {
         postItem(theme)
     }
     const [storeTheme , setStoreTheme ] = useState([])
-    let fiteredTheme = prodList.filter((theme) => 
+    let fiteredTheme = dataBase.products.filter((theme) => 
         theme.store.includes(item.store) && 
         theme.title !== item.title
     )
     useEffect(() => {
         setStoreTheme(fiteredTheme)
     },[postItem])
-
-    
-   
 
     return (
         <div className="storeInfoWrap">
@@ -44,7 +40,7 @@ const StoreInfo = ({item , prodList , postItem}) => {
                     }
                 </Swiper>
             </div>
-            <Map item={item}/>
+            {/* <Map item={item}/> */}
         </div>
     )
 }

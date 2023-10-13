@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../App.css'
 import ProductCard from '../component/ProductCard';
 import { useSearchParams } from 'react-router-dom';
 import GenreList from '../component/GenreList';
@@ -7,35 +8,40 @@ import { useSelector } from 'react-redux';
 import Navbar from '../component/Navbar';
 import ProductModal from '../component/ProductModal';
 import dataBase from '../db/db.json'
-import '../App.css'
+import Alignment from '../component/Alignment';
 
 const ProductAll = () => {
-    const [prodList, setProductList] = useState([]);
-    const [query, setQuery] = useSearchParams();
-    const [data , setData] = useState(dataBase.products)
+  const [prodList, setProductList] = useState([]);
+  const [query, setQuery] = useSearchParams();
+  const [data , setData] = useState(dataBase.products)
 
-    const getProducts = async () => {
-        let searchQuery = query.get('q') || '';
-        /* let url = `http://localhost:4004/products?q=${searchQuery}`;
-        let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
-        let response = await fetch(url);
-        let data = await response.json();
-        console.log(data) */
+  const dataAlignment = (data) => {
+    setData(data)
+  }
+  const getProducts = async () => {
+    let searchQuery = query.get('q') || '';
+    /* let url = `http://localhost:4004/products?q=${searchQuery}`;
+    let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data) */
 
-        /* let data = dataBase.products */
+    /* let data = dataBase.products */
 
-        let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
+    let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
 
-        if((query.get('q'))) {
-          setProductList(filteredData);
-        } else {
-          setProductList(data);
-        }
-    };
+    if((query.get('q'))) {
+      setProductList(filteredData);
+    } else {
+      setProductList(data);
+    }
+  };
+
     useEffect(() => {
       getProducts();
     }, [query ,  data]);
 
+    /* 지역,장르 필터 */
     let areaName = useSelector(state => state.areaName)
     let subAreaName = useSelector(state => state.subAreaName)
     let genreName = useSelector(state => state.genreName)
@@ -48,6 +54,7 @@ const ProductAll = () => {
       setfilteredProduct(filteredGenre);
     }, [areaName , subAreaName, genreName, prodList]);
 
+    /* product 모달 */
     const [showModal , setShowModal ] = useState(false)
     const [modalItem, setModalItem] = useState(null);
     const hideModal = (item) => {
@@ -62,83 +69,41 @@ const ProductAll = () => {
         position: fixed; 
         top: -${window.scrollY}px;
         overflow-y: scroll;
-        width: 100%;
-      `;
+        width: 100%;`;
     } else {
       const scrollY = document.body.style.top;
       document.body.style.cssText = '';
       window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
     }
-
-    
-    const themeAscending = () => {
-      let alignData = [...dataBase.products]
-      alignData.sort(function (a, b) {
-        return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
-      })
-      setData(alignData)
-    }
-
-    const themeDescending = () => {
-      let alignData = [...dataBase.products]
-      alignData.sort((a, b) => {
-        return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
-      })
-      setData(alignData)
-    }
-
-    const difficultyAscending = () => {
-      let alignData = [...dataBase.products]
-      alignData.sort((a,b) => {
-        return a.difficulty < b.difficulty ? -1 : a.difficulty > b.difficulty ? 1 : 0 ;
-      })
-      setData(alignData)
-    }
-
-    const difficultyDescending = () => {
-      let alignData = [...dataBase.products]
-      alignData.sort((a,b) => {
-        return a.difficulty > b.difficulty ? -1 : a.difficulty < b.difficulty ? 1 : 0;
-      })
-      setData(alignData)
-    }
     
   return (
-    <div className='prodListBox'>
+    <div className='productAllPage'>
       <Navbar />
       <div className="topInnerWrap">
         <div className="inner">           
           <AreaList />
           <GenreList />
-
-          <div className='filter'>
-            <div>정렬하기</div>
-            <ul>
-              <li onClick={themeAscending}>테마명 오름차순</li>
-              <li onClick={themeDescending}>테마명 내림차순</li>
-              <li onClick={difficultyAscending}>난이도 오름차순</li>
-              <li onClick={difficultyDescending}>난이도 내림차순</li>
-            </ul>
-          </div>
-
+          
         </div>
+        <Alignment dataBase={dataBase.products} dataAlignment={dataAlignment}/>
       </div>
 
       <div className="inner">
         <div className="themeList">
           {
             filteredGenre.length > 0 ? 
-              filteredProduct.map((menu, pAIdx) => (
+              filteredProduct.map((menu, fpIdx) => (
                 <div className="listWrap">
-                  <ProductCard item={menu} key={pAIdx} onClick={getItem} getItem={getItem} />
+                  <ProductCard item={menu} key={fpIdx} index={fpIdx} onClick={getItem} getItem={getItem} />
                 </div>
               )) 
             : <p className='failedMassage'>해당 조건의 테마가 없습니다</p>
           }
         </div>
       </div>
+
           {
-            showModal? <ProductModal item={modalItem} prodList={prodList} hideModal={hideModal}/> : null
+            showModal? <ProductModal item={modalItem} hideModal={hideModal}/> : null
           }
     </div>
   );
