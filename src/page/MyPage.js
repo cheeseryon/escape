@@ -22,10 +22,8 @@ const MyPage = () => {
 
   let dispatch = useDispatch()
   const themeRemove = (e) => {
-    let removeId = Number(e.target.id)
+    let removeId = e.target.id
     dispatch({type:"LIKE_ID_REMOVE" , payload:{removeId}})
-    console.log(removeId)
-    console.log(likeList)
   }
 
 
@@ -50,9 +48,10 @@ const MyPage = () => {
                         </div>
 
                         <div className="info">
-                          <div className="title"><span>테마 :</span>{menu.title}</div>
-                          <div className="genre"><span>장르 :</span>{menu.genre[0]}</div>
-                          <div className="store"><span>매장 :</span>{menu.store}</div>
+                          <div className="title"><span>테마 : </span>{menu.title}</div>
+                          <div className="genre"><span>장르 : </span>{menu.genre[0]}</div>
+                          <div className="store"><span>매장 : </span>{menu.store}</div>
+                          <div className="time"><span>시간 : </span>{menu.time}</div>
                           <div className='evaluation'>
                             <p className='difficulty'>
                               <span className='keyIcon'><img src={key} alt="열쇠" /></span>

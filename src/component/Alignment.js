@@ -65,8 +65,6 @@ const Alignment = ({dataBase , dataAlignment}) => {
     }
   },[selectedKey])
 
-/*   console.log(keyColor) */
-
   return (
     <div className='ailgnArea'>
       <ul className={`alignList ${align ? 'on' : ''}`}  >

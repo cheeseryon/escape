@@ -23,24 +23,18 @@ const StoreInfo = ({item , postItem}) => {
 
     return (
         <div className="storeInfoWrap">
+            
             <div className='storeThemeList'>
-                    <p>매장의 다른테마</p> 
-                <Swiper
-                    cssMode={true}
-                    navigation={true}
-                    keyboard={true}
-                    mousewheel={false}
-                    modules={[Navigation , Keyboard]}
-                    className="mySwiper"
-                >
+            <p>매장의 다른테마</p>   
+                <ul className="diffrentTheme">    
                     {
                         storeTheme.map((menu , sIdx) => (
-                            <SwiperSlide className="storeThemeItem"><ProductCard item={menu} key={sIdx} getItem={getItem}/></SwiperSlide>
+                            <li><ProductCard item={menu} key={sIdx} getItem={getItem}/></li>
                         ))
-                    }
-                </Swiper>
+                    }          
+                </ul>    
             </div>
-            {/* <Map item={item}/> */}
+            <Map item={item}/>
         </div>
     )
 }

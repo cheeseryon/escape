@@ -1,61 +1,30 @@
 import React from 'react';
 import '../App.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import likeIcon from '../img/like.png'
+import { useSelector } from 'react-redux';
 
-const Navbar = ({authenticate, setAuthenticate}, props) => {
+const Navbar = () => {
     const navigate = useNavigate();
-    const goToLogin = () => {
+    const goToMyPage = () => {
         navigate('/myPage')
     }
-
     let search = (e) => {
         if(e.key === "Enter") {            
             let keyword = e.target.value;            
             navigate(`/?q=${keyword}`)           
         }
     }
-
     let goHome = () => {
       navigate('/')
     } 
-          
+
+    let likeId = useSelector(state => state.likeId)
 
   return (
     <>
-     {/*  <div className='sideMenu' style={{width:width}}>
-        <button className='closeBtn' onClick={()=>setWidth(0)}>
-          <img src={require('../img/close.png')} alt="" />
-        </button>
-        <ul className="sideMenuList">
-          {
-            menuList.map(
-              (menu, idx) => (
-              <li key={idx}><a href="#">{menu}</a></li>
-            ))
-          }
-        </ul>
-      </div>
-        <div className="navHeader">
-          <div className="burgerMenu hide">
-            <img src={require("../img/menu.png")} alt="메뉴열기" onClick={()=>setWidth(280)}/>
-          </div>
-        </div>
-
-        {
-          authenticate ? (
-            <div onClick={()=>setAuthenticate(false)}>
-              <span style={{cursor:'pointer'}}>로그아웃</span>
-            </div>
-          ) : (
-            <div onClick={()=>navigate('/login')}>
-              <span style={{cursor:'pointer'}}>로그인</span>
-            </div>
-          )
-        } */}
-
       <div className='head'>
         <div className="inner">
           <div className="logo" onClick={goHome} style={{cursor:'pointer'}}>또!방탈출</div>
@@ -72,8 +41,13 @@ const Navbar = ({authenticate, setAuthenticate}, props) => {
               <input type="text" className="searchBox" placeholder="테마 검색" onKeyDown={(e)=> search(e)}/>
               <FontAwesomeIcon icon={faSearch} className='searchIcon'/>
             </div>
+            <div className="likeListPage"  onClick={goToMyPage}>
+              <img className='likeIcon' src={likeIcon}></img>
+              <span className='iconBg'></span>
+              <span>{likeId.length}</span>
+            </div>
             <div className="myPage">
-              <FontAwesomeIcon icon={faUser} className='userIcon' onClick={goToLogin}/>
+              <FontAwesomeIcon icon={faUser} className='userIcon' onClick={goToMyPage}/>
             </div>
           </div>
           </div>

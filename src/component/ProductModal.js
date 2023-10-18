@@ -38,7 +38,6 @@ const ProductModal = ({item , hideModal}) => {
         dispatch ({type:"MODAL_LIKE" , payload:''})
         dispatch ({type:"MODAL_ID" , payload:{modalItemId}})
     }
-    console.log(likeId)
 
     return (
         <div className='prodModalWrap'>              
@@ -84,8 +83,7 @@ const ProductModal = ({item , hideModal}) => {
 
                     <section className='bottomInfoSec'>
                         <ul className='tabArea'>
-                            <li className='storeInfo'>매장</li>
-                            <li className='review'>리뷰</li>
+                            
                         </ul>
                         <StoreInfo item={item} postItem={postItem} />
                         {/* <Review />   */}          
