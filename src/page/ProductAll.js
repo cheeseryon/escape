@@ -20,13 +20,10 @@ const ProductAll = () => {
   }
   const getProducts = async () => {
     let searchQuery = query.get('q') || '';
-    /* let url = `http://localhost:4004/products?q=${searchQuery}`;
-    let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data) */
-
-    /* let data = dataBase.products */
+    //let url = `http://localhost:4004/products?q=${searchQuery}`;
+    //let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
+    /* let response = await fetch(url);
+    let data = await response.json(); */
 
     let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
 
@@ -54,16 +51,20 @@ const ProductAll = () => {
       setfilteredProduct(filteredGenre);
     }, [areaName , subAreaName, genreName, prodList]);
 
-    /* product 모달 */
+    
     const [showModal , setShowModal ] = useState(false)
     const [modalItem, setModalItem] = useState(null);
     const hideModal = (item) => {
       setShowModal(item)
     }
+
+    /* 자식 컴포넌트에서 모달창 닫기버튼과  */
     const getItem = (item) => {
       setModalItem(item);
       setShowModal(!showModal)
     };
+
+    /* 모달창이 마운트시 배경요소가 스크롤되는 것을 방지 */
     if(showModal == true) {
       document.body.style.cssText = `
         position: fixed; 
@@ -101,7 +102,6 @@ const ProductAll = () => {
           }
         </div>
       </div>
-
           {
             showModal? <ProductModal item={modalItem} hideModal={hideModal}/> : null
           }

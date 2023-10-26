@@ -1,25 +1,22 @@
 import React , {useEffect , useState}from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
 import dataBase from '../db/db.json'
 import Navbar from '../component/Navbar'
 import key from '../img/key.png'
 import xIcon from '../img/xIcon.png'
 
 const MyPage = () => {
-
   let likeId = useSelector(state => state.likeId)  
   let data = dataBase.products
 
+  /* 좋아요가 클릭된 요소를 filter해서 목록에 추가하기 */
  const [likeList , setLikeList] = useState([])
-
   useEffect(() => {
     let filteredData = data.filter((dataObj) => likeId.includes(dataObj.id))
     setLikeList(filteredData)
   }, [likeId])
 
-  /* console.log(likeList) */
-
+  /* store에서 좋아요가 된 요소 제거하기 */
   let dispatch = useDispatch()
   const themeRemove = (e) => {
     let removeId = e.target.id

@@ -13,17 +13,26 @@ const ProductModal = ({item , hideModal}) => {
         hideModal(false)
     }
 
-    const [theme , setTheme] =useState()
+    /* 하위 컴포넌트인 매장의 다른테마 선택하면 해당 요소의 정보(객체)를 호출 */
+    const [theme , setTheme] = useState()
     const postItem = (list) => {
         setTheme(list)
     }
+    /* 하위 컴포넌트에서 호출된 정보가 있다면 부모 컴포넌트의 item을 하위 컴포넌트의 item으로 변경 */
     if(theme) {
         item = theme
     }
 
+    /* 모달창에서 좋아요 클릭시 해당 item.id를 store에 저장 */
     let dispatch = useDispatch()
-    let likeId = useSelector(state => state.likeId)  
+    let modalItemId = item.id
+    const likeClick = () => {
+        dispatch ({type:"MODAL_LIKE" , payload:''})
+        dispatch ({type:"MODAL_ID" , payload:{modalItemId}})
+    }
 
+    /* store에 저장된 좋아요 id목록을 호출하고 좋아요 on 시키기 */
+    let likeId = useSelector(state => state.likeId)  
     const [modalLike , setModalLike ] = useState()
     useEffect(() => {
         if(likeId.includes(item.id)) {
@@ -32,12 +41,6 @@ const ProductModal = ({item , hideModal}) => {
             setModalLike(false)
         }
     }, [likeId , postItem]);
-
-    let modalItemId = item.id
-    const likeClick = () => {
-        dispatch ({type:"MODAL_LIKE" , payload:''})
-        dispatch ({type:"MODAL_ID" , payload:{modalItemId}})
-    }
 
     return (
         <div className='prodModalWrap'>              
@@ -85,9 +88,7 @@ const ProductModal = ({item , hideModal}) => {
                         <ul className='tabArea'>
                             
                         </ul>
-                        <StoreInfo item={item} postItem={postItem} />
-                        {/* <Review />   */}          
-                       
+                        <StoreInfo item={item} postItem={postItem} />      
                     </section>
                 </div>
 

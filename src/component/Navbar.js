@@ -17,10 +17,12 @@ const Navbar = () => {
             navigate(`/?q=${keyword}`)           
         }
     }
+    /* productAll로 이동 */
     let goHome = () => {
       navigate('/')
     } 
 
+    /* 좋아요 갯수 표시 */
     let likeId = useSelector(state => state.likeId)
 
   return (

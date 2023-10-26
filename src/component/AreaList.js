@@ -73,11 +73,11 @@ const AreaList = () => {
     const subAreaCheck = (e) => {
         e.preventDefault();
         let targetText = e.target.innerText //서브지역(홍대,강남..) 선택시 서브지역명 추출
-        setSubAreaName(targetText) //
+        setSubAreaName(targetText)
         setSubAreaTextColor(e.target.value)
 
         dispatch({type:"SUBAREA_SELECT" , payload:{subAreaName:targetText}}) // 홈(productAll)에서 서브지역 필터를 위해 필요
-        dispatch({type:"GENRE_SELECT" , payload:{genreName:genreName}}) // 왜 만들었는지 기억이 안남
+        dispatch({type:"GENRE_SELECT" , payload:{genreName:genreName}})
     }
 
   return (

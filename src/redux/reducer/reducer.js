@@ -58,9 +58,6 @@ function reducer(state = initialState, action) {
             const updateLikeIdRemove = state.likeId.includes(payload.removeId)
                 ? state.likeId.filter(id => id !== payload.removeId)
                 : [...state.likeId, payload.removeId]
-
-                console.log(payload.removeId)
-                console.log(state.likeId)
             return {
                 ...state,
                 likeId: updateLikeIdRemove
