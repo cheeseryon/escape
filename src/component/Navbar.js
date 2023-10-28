@@ -17,6 +17,7 @@ const Navbar = () => {
             navigate(`/?q=${keyword}`)           
         }
     }
+    
     /* productAll로 이동 */
     let goHome = () => {
       navigate('/')

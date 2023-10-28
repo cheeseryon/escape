@@ -50,6 +50,8 @@ const ProductCard = ({item , getItem}) => {
             </p>
           </div>
         </div>
+       
+        <div className="detailShowText">상세보기</div>
       </div>
     </div>
   )

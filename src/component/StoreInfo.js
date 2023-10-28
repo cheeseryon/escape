@@ -1,12 +1,7 @@
-import React , { useState , useEffect , useRef , useCallback }from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation,Keyboard, } from 'swiper/modules';
+import React , {useState , useEffect}from 'react'
 import ProductCard from './ProductCard'
 import Map from './Map'
 import dataBase from '../db/db.json'
-
-import 'swiper/css';
-import 'swiper/css/navigation';
 
 const StoreInfo = ({item , postItem}) => {
 
@@ -28,8 +23,7 @@ const StoreInfo = ({item , postItem}) => {
     },[postItem])
 
     return (
-        <div className="storeInfoWrap">
-            
+        <div className="storeInfoWrap">            
             <div className='storeThemeList'>
             <p>매장의 다른테마</p>   
                 <ul className="diffrentTheme">    
