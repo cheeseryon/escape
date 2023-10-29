@@ -29,7 +29,7 @@ const ProductCard = ({item , getItem}) => {
     } else {
       setCardLike(false)
     }
-  }, [likeId])
+  }, [likeId , postItem])
 
   return (
     <div className='prodCardWrap'>
