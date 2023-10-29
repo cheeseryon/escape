@@ -2,7 +2,7 @@ import React ,{useState,useEffect}from 'react'
 
 const {kakao} = window
 const Map = ({item}) => {
- /*  const [storeMap , setStoreMap] = useState()
+  const [storeMap , setStoreMap] = useState()
   const [address , setAddress] = useState()
   useEffect(() => {
     setStoreMap(item.store)
@@ -36,7 +36,7 @@ const Map = ({item}) => {
         position: new kakao.maps.LatLng(data[0].y, data[0].x),
       })
     }
-  }, []) */
+  }, [])
 
   return (
     <div>
