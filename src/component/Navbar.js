@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState} from 'react';
 import '../App.css'
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,13 +11,23 @@ const Navbar = () => {
     const goToMyPage = () => {
         navigate('/myPage')
     }
-    let search = (e) => {
-        if(e.key === "Enter") {            
-            let keyword = e.target.value;            
-            navigate(`/?q=${keyword}`)           
-        }
-    }
     
+    const [keyword , setKeyword] = useState();
+    
+    let textInput = (e) => {
+      setKeyword(e.target.value)
+    }
+
+    let textSearch = (e) => {
+      if(e.key === "Enter") {                  
+         navigate(`/?q=${keyword}`)         
+       } 
+    }
+
+    let iconSearch = () => {
+      navigate(`/?q=${keyword}`)  
+    }
+
     /* productAll로 이동 */
     let goHome = () => {
       navigate('/')
@@ -33,8 +43,8 @@ const Navbar = () => {
           <div className="logo" onClick={goHome} style={{cursor:'pointer'}}>또!방탈출</div>
             <div className="util">
               <div className='searchArea'>
-                <input type="text" className="searchBox" placeholder="테마 검색" onKeyDown={(e)=> search(e)}/>
-                <FontAwesomeIcon icon={faSearch} className='searchIcon'/>
+                <input type="text" className="searchBox" placeholder="테마 검색" onChange={(e)=>textInput(e)} onKeyDown={(e)=>textSearch(e)}/>
+                <FontAwesomeIcon icon={faSearch} className='searchIcon' onClick={iconSearch}/>
               </div>
               <div className="likeListPage"  onClick={goToMyPage}>
                 <img className='likeIcon' src={likeIcon}></img>

@@ -384,7 +384,10 @@
         "img": "https://mblogthumb-phinf.pstatic.net/MjAyMjAzMTlfMTEg/MDAxNjQ3NjU2Njc5MDcz.F6iit_pKjEj_dt7E6_wRI-I78LDfseHCureA419jpJUg.n-7Fz64-bCsr_k6K6Fl8PlX9EqxeuPCgrIHfxVMHDxIg.JPEG.bbabi-/Pr_1628228985.jpg?type=w800",
         "title": "딜레마",
         "store": "비밀의화원 건대",
-        "genre": "미스터리",
+        "genre": [
+            "미스터리",
+            "전체"
+        ],
         "time": "75분",
         "area": "서울",
         "subArea": [
@@ -816,7 +819,7 @@
         "id": "46",
         "img": "https://www.zerogangnam.com/storage/AVISPw8N2JfMThKvnk3VJzeY9qywIaYd8pTy46Xx.jpg",
         "title": "포레스트",
-        "store": "제로월드 강남점",
+        "store": "황금열쇠 강남",
         "genre": [
             "공포",
             "전체"

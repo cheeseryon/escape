@@ -19,24 +19,19 @@ const ProductAll = () => {
     setData(data)
   }
   const getProducts = async () => {
-    let searchQuery = query.get('q') || '';
-    //let url = `http://localhost:4004/products?q=${searchQuery}`;
-    //let url = `https://my-json-server.typicode.com/cheeseryon/escape/products?q=${searchQuery}`;
-    /* let response = await fetch(url);
-    let data = await response.json(); */
-
-    let filteredData = data.filter((item)=> item.title.includes(query.get('q')))
-
     if((query.get('q'))) {
+      let filteredData = data.filter((item)=> item.title.toLowerCase().includes(query.get('q').toLowerCase()))
       setProductList(filteredData);
     } else {
       setProductList(data);
     }
   };
 
+  console.log(query.get('q'))
+
     useEffect(() => {
       getProducts();
-    }, [query ,  data]);
+    }, [query , data]);
 
     /* 지역,장르 필터 */
     let areaName = useSelector(state => state.areaName)
@@ -74,9 +69,9 @@ const ProductAll = () => {
     } else {
       document.body.style.cssText = '';
       const scrollY = document.body.style.top;
-      window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      window.scrollTo(0, parseInt(scrollY || '0' , 10) * -1);
     }
-    
+
   return (
     <div className='productAllPage'>
       <Navbar />
