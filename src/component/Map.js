@@ -2,7 +2,7 @@ import React ,{useState,useEffect}from 'react'
 
 const {kakao} = window
 const Map = ({item}) => {
- /*  const [storeMap , setStoreMap] = useState()
+  const [storeMap , setStoreMap] = useState()
   const [address , setAddress] = useState()
   useEffect(() => {
     setStoreMap(item.store)
@@ -45,7 +45,7 @@ const Map = ({item}) => {
         <div id="map"></div>
       </div>
     </div>
-  ) */
+  )
 }
 
 export default Map
