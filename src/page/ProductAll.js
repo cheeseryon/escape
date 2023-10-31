@@ -20,14 +20,12 @@ const ProductAll = () => {
   }
   const getProducts = async () => {
     if((query.get('q'))) {
-      let filteredData = data.filter((item)=> item.title.toLowerCase().includes(query.get('q').toLowerCase()))
+      let filteredData = dataBase.products.filter((item)=> item.title.toLowerCase().includes(query.get('q').toLowerCase()))
       setProductList(filteredData);
     } else {
       setProductList(data);
     }
   };
-
-  console.log(query.get('q'))
 
     useEffect(() => {
       getProducts();
