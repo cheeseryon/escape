@@ -6,12 +6,12 @@ import keyOn from '../img/keyOn.png'
 import xIcon from '../img/xIcon.png'
 import xIconOn from '../img/xIconOn.png'
 
-const Alignment = ({dataBase , dataAlignment}) => {
+const Alignment = ({themeDb , dataAlignment}) => {
   const [themeAligntBtn , setThemeAligntBtn] = useState(1)
 
   /* 테마명 오름차순 정렬 */
   const themeAscending = (e) => {
-    let dataAlign = [...dataBase]
+    let dataAlign = [...themeDb]
     dataAlign.sort(function (a, b) {
       return a.title < b.title ? -1 : a.title > b.title ? 1 : 0;
     })
@@ -21,7 +21,7 @@ const Alignment = ({dataBase , dataAlignment}) => {
 
   /* 테마명 내림차순 정렬 */
   const themeDescending = (e) => {
-    let dataAlign = [...dataBase]
+    let dataAlign = [...themeDb]
     dataAlign.sort((a, b) => {
       return a.title > b.title ? -1 : a.title < b.title ? 1 : 0;
     })
@@ -59,14 +59,14 @@ const Alignment = ({dataBase , dataAlignment}) => {
   }
 
   /*
-    난이도가 선택되면 해당 난이도에 맞는 테마만 filter해서 부모에게 전달하고,
+    난이도가 선택되면 해당 난이도에 맞는 테마만 filter 후 부모에게 전달하고,
     난이도가 선택되지 않는 경우 부모 컴포넌트에게 기존의 데이터베이스를 전달
   */
   useEffect(() => {
     if(selectedKey.length == 0) {
-      dataAlignment([...dataBase])
+      dataAlignment([...themeDb])
     } else {
-      let dataAlign = [...dataBase]
+      let dataAlign = [...themeDb]
       let filteredDifficulty = dataAlign.filter((item) => selectedKey.includes(item.difficulty))
 
       dataAlignment(filteredDifficulty)

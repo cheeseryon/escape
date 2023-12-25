@@ -53,7 +53,7 @@ const AreaList = () => {
     },[])
 
     const areaCheck = (e) => {
-        let targetId = e.target.id //메인지역(서울,경기) ##선택시 해당 지역의 id##
+        let targetId = e.target.id //메인지역(서울,경기) ##선택시 해당 지역의 id
         let filteredArea = areaList.find(item => item.id == targetId); // 모든 지역명을 가지고 있는 객체에서 바로 위 targetId로 원하는 지역 객체만 필터
 
         let targetText = e.target.innerText // 메인지역(서울,경기) 선택시 해당 지역명을 추출
@@ -83,9 +83,10 @@ const AreaList = () => {
   return (
     <div className="areaSection">
         <div>  
-            <div className='areaSelectBox'>
+            <div className="areaText">지역</div>
+            <div className='areaSelectBox'>                
                 <button className={`selectBtn ${areaBtnToggle ? 'on' : ''}`} onClick={toggleBtn}>
-                    지역 : {areaName}
+                    {areaName}
                 </button>
                 <ul className={`areaOption ${areaBtnToggle ? '' : 'hide'}`}>
                     {

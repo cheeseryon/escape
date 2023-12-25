@@ -2,8 +2,7 @@ const initialState = {
     areaName: '',
     subAreaName: '',
     genreName: '',
-    likeToggle:'false',
-    likeId:[]
+    tabIndex:''
 };
 function reducer(state = initialState, action) {
     const { type, payload } = action;
@@ -26,7 +25,14 @@ function reducer(state = initialState, action) {
                 ...state,
                 subAreaName: payload.subAreaName,
             }
-        case "MODAL_LIKE":
+
+        case "TABINDEX":
+            return {
+                ...state,
+                tabIndex: payload.tabIndex,
+            }
+        
+      /*   case "MODAL_LIKE":
             return {
                 ...state,
                 likeToggle: (state.likeToggle == false) ? true : false
@@ -61,7 +67,7 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 likeId: updateLikeIdRemove
-            }
+            } */
 
         default:
             return state;

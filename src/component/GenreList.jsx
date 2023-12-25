@@ -41,14 +41,14 @@ const GenreList = () => {
 
   return (
     <div className="genreList">
+      <div>장르</div>
       <ul>
-        <li>장르</li>
-          {
-            genre.map((list, idx) =>
-            <li className={`${genreTextColor == idx ? 'on' : ''}`} onClick={genreCheck} key={idx} value={idx}>
-                {list}
-            </li>
-          )}
+        {
+          genre.map((list, idx) =>
+          <li className={`${genreTextColor == idx ? 'on' : ''}`} onClick={genreCheck} key={idx} value={idx}>
+              {list}
+          </li>
+        )}
       </ul>
     </div>
   )
