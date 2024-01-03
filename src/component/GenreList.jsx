@@ -24,10 +24,10 @@ const GenreList = () => {
   },[dispatch])
 
   //메인지역(서울,경기) 선택시 장르 필터를 "전체"로 변경 (장르 필터 초기화)
-  let areaName = useSelector(state => state.areaName) 
+  let mainAreaName = useSelector(state => state.mainAreaName) 
   useEffect(()=> {
     setGenreTextColor(0)
-  },[areaName])
+  },[mainAreaName])
 
   /* 장르 선택시 store에 저장 */
   const genreCheck = (e) => {

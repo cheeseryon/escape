@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/escape_favicon.ico" />
+    <link rel="icon" href="escape_favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard-dynamic-subset.css" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5ad4f21db2cf9841d339d49d705ad591&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_APP_KAKAOMAP%&libraries=services"></script>
     
     <title>또!방탈출</title>
   </head>
@@ -23,9 +23,5 @@
     <div id="root"></div>
     <div id="app"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&libraries=places&v=weekly"
-      defer
-    ></script>
   </body>
 </html>

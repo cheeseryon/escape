@@ -1,39 +1,44 @@
 import './App.css';
 import {React, useState, useEffect} from 'react';
 import { Routes, Route } from 'react-router-dom';
-import ProductAll from './page/ProductAll';
-import MyPage from './page/MyPage';
-import Login from './page/Login';
-import Account from './page/Account';
-import {firestore, auth, onAuthStateChanged } from "./firebase-config"
-import { doc, collection, getDocs , onSnapshot} from 'firebase/firestore';
+import ProductAll from './page/productAll';
+import MyPage from './page/myPage';
+import Login from './page/login';
+import SignUpPage from './page/signUpPage';
+import TermsPage from './page/termsPage'
+import {firestore,auth,onAuthStateChanged} from "./firebase-config"
+import {collection,onSnapshot} from 'firebase/firestore';
 
 function App() {
   const user = auth.currentUser
   const [userId,setUserId] = useState('')
   const [likeIdList,setLikeIdList] = useState([])
-  const [recordedIdList,setRecordedIdList] = useState([])
+  const [reviewIdList,setReviewIdList] = useState([])
+  const [reviewObJ,setReviewObj] = useState([])
   const [schedulesList,setSchedulesList] = useState([])
   const [scheduleItems, setScheduleItems] = useState([])
+  const [scheduleId, setScheduleId] = useState([])
   const [logoutCheck,setLogoutCheck] = useState(false)
 
   const appLogoutCheck = (check) => {
     setLogoutCheck(check)
   }
-
+  
   useEffect(() => {
     const userCheck = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUserId(user.uid);
         fetchUserLikeList(user.uid)
-        fetchUserRecordedList(user.uid)
+        fetchUserReviewList(user.uid)
         fetchUserScheduleList(user.uid)
       } else {
         setUserId("");
         setLikeIdList([])
-        setRecordedIdList([])
-        fetchUserScheduleList([])
-        setScheduleItems([])
+        setReviewIdList([])
+        setReviewObj([])
+        setSchedulesList([])
+        setScheduleItems([]) 
+        setScheduleId([])
       }
     });
     return userCheck;
@@ -55,42 +60,49 @@ function App() {
     };
   }
   
-  const fetchUserRecordedList = async (userId) => {
+  const fetchUserReviewList = async (userId) => {
     try {
-      const q = collection(firestore, userId, 'record', 'recordedObj');
+      const q = collection(firestore, userId, 'review', 'reviewObj');
       const subscribe = onSnapshot(q, (querySnapshot) => {
-        let recordedIdArr = [];
+        let reviewId = [];
+        let reviewObj = [];
         querySnapshot.forEach((doc) => {
-          recordedIdArr.push(doc.id);
+          reviewId.push(doc.id);
+          reviewObj.push(doc.data());
         });
-        setRecordedIdList(recordedIdArr);
+        setReviewIdList(reviewId);
+        setReviewObj(reviewObj);
         return subscribe;
       })
     } catch (error) {
-        console.log("recordedList get error")
+        console.log("reviewList get error")
     };
   };
 
   const fetchUserScheduleList = async (userId) => {
     try {
-      const q = collection(firestore, userId, "schedule", "list");
+      const q = collection(firestore, userId, "schedule", "list" );
       const subscribe = onSnapshot(q, (querySnapshot) => {
-        let schedulsArr = [];
+        let dateArr = [];
         let itemsArr = [];
+        let itemIdArr = [];
         querySnapshot.forEach((doc) => {
-          schedulsArr.push(doc.id)
+          dateArr.push(doc.data().date)
           itemsArr.push(doc.data())
+          itemIdArr.push(doc.data().id)
         })
-        setSchedulesList(schedulsArr)
+        setSchedulesList(dateArr)
         setScheduleItems(itemsArr)
+        setScheduleId(itemIdArr)
         return subscribe
       })
     } catch (error) {
-      console.log("스케줄 문서 에러")
+      console.log("shcedule get error")
     }
   }
 
-  console.log(scheduleItems)
+  
+
   return (  
     <>
       <Routes>
@@ -100,9 +112,12 @@ function App() {
               likeIdList={likeIdList}
               appLogoutCheck={appLogoutCheck}
               uid={userId}
-              recordedIdList={recordedIdList}
+              reviewIdList={reviewIdList}
+              reviewObJ={reviewObJ}
               schedulesList={schedulesList}
-              scheduleItems={scheduleItems}/>
+              scheduleItems={scheduleItems}
+              scheduleId={scheduleId}
+            />
           } 
         />
 
@@ -111,14 +126,18 @@ function App() {
             <MyPage
               likeIdList={likeIdList}
               uid={userId}
-              recordedIdList={recordedIdList}
+              reviewIdList={reviewIdList}
+              reviewObJ={reviewObJ}
               schedulesList={schedulesList}
-              scheduleItems={scheduleItems}/>
+              scheduleItems={scheduleItems}
+              scheduleId={scheduleId}
+            />
           }
         />
 
         <Route path='loginPage' element={<Login />} />
-        <Route path='account' element={<Account/>} />
+        <Route path='signUpPage' element={<SignUpPage/>} />
+        <Route path='termsPage' element={<TermsPage/>} />
       </Routes>
     </>
   );

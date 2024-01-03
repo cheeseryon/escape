@@ -2,16 +2,15 @@ import React ,{useState,useEffect}from 'react'
 
 const {kakao} = window
 const Map = ({item}) => {
-  const [storeAddress , setStoreAddress] = useState('')
+const [storeAddress , setStoreAddress] = useState('')
 
   useEffect(() => {
-    var container = document.getElementById('map');
-    var options = {
+    var mapContainer = document.getElementById('map');
+    var mapOption  = {
       center: new kakao.maps.LatLng(37.5009333761724 , 127.024581465886 ),
       level:3 
     };
-    var map = new kakao.maps.Map(container, options);
-  
+    var map = new kakao.maps.Map(mapContainer, mapOption );
     var places = new kakao.maps.services.Places(map);
     places.keywordSearch(item.store , callback);
 
@@ -44,9 +43,8 @@ const Map = ({item}) => {
       });
 
       setStoreAddress(result[0].address_name)
-      
     }
-  }, [])
+  }, [item.id])
 
 
   return (

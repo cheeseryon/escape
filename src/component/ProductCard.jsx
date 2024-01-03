@@ -1,19 +1,17 @@
 import { React, useState, useEffect} from 'react'
 import '../App.css'
 import { useNavigate } from 'react-router-dom'
-import key from '../img/key.png'
-import xIcon from '../img/xIcon.png'
 import {firestore} from "../firebase-config"
 import {doc, serverTimestamp, runTransaction } from "firebase/firestore";
 
 const ProductCard = ({item, getProdCardData, loginCheck, userId, likeIdList}) => {
-  const postParentComponentData = (event) => {
-    event.stopPropagation()
+  const postParentComponentData = (e) => {
+    e.stopPropagation()
     getProdCardData(item);
   };
 
-  const likeClick = async (event) => {
-    event.stopPropagation()
+  const likeClick = async (e) => {
+    e.stopPropagation()
     try {
       let cardItemId = item.id
       const likeRef = doc(firestore, userId, 'like', 'likeObj', cardItemId);
@@ -41,26 +39,28 @@ const ProductCard = ({item, getProdCardData, loginCheck, userId, likeIdList}) =>
         }
       });
     } catch (error) {
-      console.log("좋아요 토글 실패", error);
+      console.log("");
     }
   };
 
   const navigator = useNavigate()
-  const goToLoginPage = (event) => {
-    event.stopPropagation()
+  const goToLoginPage = (e) => {
+    e.stopPropagation()
     let msg=window.confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?")
     if(msg) {
       navigator("/loginPage")
     }
   }
 
+  const [storeDifficulty, setStoreDifficulty] = useState(["매우쉬움","쉬움","보통","어려움","매우어려움"])
+
   return (
     <div className='prodCardWrap'>
       <div
         className={`like ${likeIdList.includes(item.id) ? 'on' : ''}`}
-        onClickCapture={(event) => {loginCheck ? likeClick(event) : goToLoginPage(event)}}
+        onClickCapture={(e) => {loginCheck ? likeClick(e) : goToLoginPage(e)}}
       />
-      <div className="prodCardItem" onClickCapture={(event) => {postParentComponentData(event)}}>
+      <div className="prodCardItem" onClickCapture={(e) => {postParentComponentData(e)}}>
         <figure>
           <img src={item?.img} alt="" />
         </figure>
@@ -68,13 +68,7 @@ const ProductCard = ({item, getProdCardData, loginCheck, userId, likeIdList}) =>
           <div className="title"><span>테마 :</span>{item.title}</div>
           <div className="genre"><span>장르 :</span>{item.genre[0]}</div>
           <div className="store"><span>매장 :</span>{item.store}</div>
-          <div className='evaluation'>
-            <p className='difficulty'>
-              <span className='keyIcon'><img src={key} alt="열쇠" /></span>
-              <span className='xIcon'><img src={xIcon} alt="" /></span>
-              <span className='num'>{item.difficulty}</span>
-            </p>
-          </div>
+          <div className='evaluation'><span>난이도 :</span> {storeDifficulty[item.difficulty - 1]}</div>
         </div>
        
         <div className="detailShowText">상세보기</div>

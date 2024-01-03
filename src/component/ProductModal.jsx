@@ -1,18 +1,14 @@
-import React , { useState , useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {doc, serverTimestamp, runTransaction } from "firebase/firestore";
+import {React,useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {firestore} from "../firebase-config"
+import {doc,serverTimestamp,runTransaction} from "firebase/firestore";
 import '../App.css'
-import key from '../img/key.png'
-import xIcon from '../img/xIcon.png'
 import closeIcon from '../img/close.png'
 import StoreInfo from './StoreInfo';
 import CalendarC from './CalendarC';
+import Review from './Review';
 
-import {firestore} from "../firebase-config"
-
-
-
-const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recordedIdList}) => {
+const ProductModal = ({item, hideModal, loginCheck, userId, likeIdList, reviewIdList, reviewObJ, scheduleItems, schedulesList, scheduleId}) => {
     const modalClose = () => {
         hideModal(false)
     }
@@ -27,70 +23,31 @@ const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recorde
         item = theme
     }
     
+    const [storeDifficulty, setStoreDifficulty] = useState(["매우쉬움","쉬움","보통","어려움","매우어려움"])
 
-    /* 사이트 버튼 기능들 */
+    /* 사이트 버튼 기능 */
     let navigate = useNavigate()
     const goToLoginPage = () => {
         let msg=window.confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?")
         if(msg) {
-            navigate("/")
+            navigate("/loginPage")
         }
     }
-
-    const goToStoreHomepage = () => {
-        window.open(item.site)
-    }
-
-    const [calendarOn , setCalendarOff] = useState(false)
+    const goToHomepage = () => {window.open(item.site)}
+    const [calendarOnOff , setCalendarOnOff] = useState(false)
     const addSchedule = () => {
-        setCalendarOff(!calendarOn)
+        setCalendarOnOff(!calendarOnOff)
+        setReviewOnOff(false)
     }
+    const calendarCloseBtn = (state) => {setCalendarOnOff(state)}
 
-    const cancelBtn = (state) => {
-        setCalendarOff(state)
+    const [reviewOnOff,setReviewOnOff] = useState(false)
+    const recordClick = () => {
+        setReviewOnOff(!reviewOnOff)
+        setCalendarOnOff(false)
     }
-
-    const recordedTheme = async() => {
-        try {
-            let cardItemId = item.id
-            const recordedThemeRef = doc(firestore, userId, 'record', 'recordedObj', cardItemId)
-            await runTransaction(firestore, async(transaction) => {
-                const recordedThemeDoc = await transaction.get(recordedThemeRef)
-
-                if (recordedThemeDoc.exists()) {
-                    let deleteConfirmMsg = window.confirm("해당 테마를 기록에서 삭제하시겠습니까?")
-                    if(deleteConfirmMsg) {
-                        transaction.delete(recordedThemeRef)
-                    } 
-                }else {
-                    let recordedConfirmMsg = window.confirm("해당 테마를 기록하시겠습니까?")
-                    if(recordedConfirmMsg) {
-                        transaction.set(recordedThemeRef, {
-                            id: item.id,
-                            img: item.img,
-                            title: item.title,
-                            store: item.store,
-                            site: item.site,
-                            genre: item.genre,
-                            time: item.time,
-                            area: item.area,
-                            subArea: item.subArea,
-                            difficulty: item.difficulty,
-                            story: item.story,
-                            timestp: serverTimestamp(),
-                            escapeCheck: "",
-                            leftTime:"",
-                            hint:"",
-                            perceivedDifficulty:"",
-                            review:""
-                        })
-                    }
-                }
-            }) 
-        } catch(error) {
-            console.log("기록하기 토글 실패",error)
-        };
-    };
+    
+    const getReviewClose = (state) => {setReviewOnOff(state)}
 
     const likeClick = async () => {
         try {
@@ -121,11 +78,13 @@ const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recorde
             });
     
             } catch (error) {
-            console.log("좋아요 토글 실패", error);
+                console.log("");
             }
-        };
+    };
 
-   
+    const getScheduleByDate = () => {
+        /* 빈값 */
+    }
 
     return (
         <section className='modalSection'>              
@@ -137,27 +96,26 @@ const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recorde
                         <figure className='imgArea'>
                             <img className='img' src={process.env.PUBLIC_URL + item?.img} alt={item?.imgAlt} />
                         </figure>
-                        <div className='textArea'>
-                            <p className='title'>{item?.title}</p>
-                            <p className='genre'>{item?.genre[0]}</p>
-                            <p className='store'>{item?.store}</p>
-
-                            <div className='evaluation'>
-                                <p className='difficulty'>
-                                    <span className='keyIcon'><img src={key} alt="열쇠" /></span>
-                                    <span className='xIcon'><img src={xIcon} alt="" /></span>
-                                    <span className='num'><span>{item?.difficulty}</span>  </span>
-                                </p>                                
+                        <div className='textArea'>                       
+                            <p className='title'><span>테마 :</span>{item.title}</p>
+                            <p className='genre'><span>장르 :</span>{item.genre[0]}</p>
+                            <p className='store'><span>매장 :</span>{item.store}</p>
+                            <div className='evaluation'>                            
+                                {
+                                    storeDifficulty.map((menu,idx) => (                                        
+                                        <span menu={menu} key={idx} className={`selectedOption ${Number(item.difficulty) === idx + 1 ? "on" :""}`}>{menu}</span>
+                                    ))
+                                }
                             </div>
                             <div className='themeInfo'>
                                 <h4>테마 설명</h4>
                                 <p className='themeInfoText'>
                                 {
-                                    item?.story.split('\n').map((text, index) => (
-                                    <React.Fragment key={index}>
+                                    item.story.split('\n').map((text, index) => (
+                                    <span key={index}>
                                         {text}
                                         <br />
-                                    </React.Fragment>
+                                    </span>
                                     ))
                                 }
                                 </p>
@@ -166,33 +124,36 @@ const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recorde
                     </article>
 
                     <article className='secondArticle'>
-                        <ul className='tabArea'>
-                            
+                        <ul className='tabArea'>                            
+                            <li className="tabMenu">매장정보</li>
                         </ul>
-                        <StoreInfo item={item}
-                            getStoreInfoData={getStoreInfoData}
-                            loginCheck={loginCheck}
-                            userId={userId}
-                            likeIdList={likeIdList}
-                        />      
+                        <div className="tabItem">
+                            <StoreInfo
+                                item={item}
+                                getStoreInfoData={getStoreInfoData}
+                                loginCheck={loginCheck}
+                                userId={userId}
+                                likeIdList={likeIdList}                            
+                            /> 
+                        </div>
                     </article>
                 </div>
 
-                <div className="btnArea">
+                <div className="sideBtnArea">
                     <div id='top'>
-                        <div className="storeLink" onClick={goToStoreHomepage}>
+                        <div className="storeLink" onClick={goToHomepage}>
                             <span className="imgBox"/>
                             <span className="btnHoverActive">홈페이지</span>
                         </div>
 
-                        <div className={`schedule ${calendarOn ? 'active' : ''}`} onClick={loginCheck ? addSchedule : goToLoginPage}>                        
+                        <div className={`schedule ${calendarOnOff ? 'active' : ''} ${scheduleId.includes(item.id) ? 'on' : ''}`} onClick={loginCheck ? addSchedule : goToLoginPage}>                        
                             <span className="imgBox"/>
                             <span className="btnHoverActive">일정 등록</span>
                         </div>
 
-                        <div className={`recorded ${recordedIdList.includes(item.id) ? 'on' : ''}`} onClick={loginCheck ? recordedTheme : goToLoginPage}>                        
-                            <span className="imgBox"/>
-                            <span className="btnHoverActive">기록하기</span>
+                        <div className={`review ${reviewOnOff ? 'active' : ''} ${reviewIdList.includes(item.id) ? 'on' : ''}`} onClick={loginCheck ? recordClick : goToLoginPage}>                        
+                            <span className="imgBox" />
+                            <span className="btnHoverActive">후기 기록</span>
                         </div>
 
                         <div className={`like ${likeIdList.includes(item.id) ? 'on' : ''}`} onClick={loginCheck ? likeClick : goToLoginPage}>
@@ -210,17 +171,26 @@ const ProductModal = ({item , hideModal, loginCheck, userId, likeIdList, recorde
                 </div>
 
                 {
-                    calendarOn
-                    ? 
-                    <div className="calendarWrap">
+                    calendarOnOff
+                    ? <div className="modalChangeComp" id="calendarComp">
                         <div>
                             <h2>일정 등록</h2>
-                            <CalendarC cancelBtn={cancelBtn} item={item} userId={userId}/>
+                            <CalendarC cancelBtn={calendarCloseBtn} item={item} userId={userId} getScheduleByDate={getScheduleByDate} scheduleItems={scheduleItems}/>
                         </div>
                     </div>
-
                     : '' 
                 } 
+
+                {
+                    reviewOnOff
+                    ? <div className="modalChangeComp" id="reviewComp">
+                        <div>
+                            <h2>후기 기록하기</h2>
+                            <Review item={item} userId={userId} getReviewClose={getReviewClose} reviewObJ={reviewObJ}/>
+                        </div>
+                    </div>
+                    :""
+                }
 
             </div> 
                        

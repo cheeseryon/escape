@@ -1,4 +1,4 @@
-import React , {useEffect, useState}from 'react'
+import React , {useState}from 'react'
 import { useNavigate } from 'react-router-dom'
 import { auth , signInWithEmailAndPassword } from "../firebase-config";
 
@@ -8,7 +8,7 @@ const Login = () => {
       navigate('/')
   }
   const goAccountPage = () => {
-    navigate('/account')
+    navigate('/termsPage')
   }
 
   const [inputFocus, setInputFocus ] = useState('');
@@ -39,14 +39,20 @@ const Login = () => {
           setLoginEmail("");
           setLoginPw("");
 
-          navigate('/myPage')
+          navigate('/')
         }) .catch((err) => {
-            console.log(err.code)
             setErrorMsg("아이디 또는 비밀번호를 확인해주세요.")
         })
       }
     }
     
+    const activeEnter = (e) => {
+      if(e.key === "Enter") {
+        e.preventDefault()
+        login();
+      }
+    }
+
   return (
     <div className="loginPage">
       <div className='wrap'>
@@ -57,7 +63,7 @@ const Login = () => {
             <span className='idIcon'></span>    
             <input
               type="email"
-              placeholder="아이디" 
+              placeholder="이메일" 
               id="1"
               onChange={(e) =>{setLoginEmail(e.target.value)}}  
               onFocus={(e) => {setInputFocus(e.target.id)}}
@@ -73,10 +79,7 @@ const Login = () => {
                 id="2"
                 onChange={(e) =>{setLoginPw(e.target.value)}}  
                 onFocus={(e) => {setInputFocus(e.target.id)}}
-                onKeyDown={(e) => {
-                  if(e.key === "Enter") {
-                    login()
-                }}}
+                onKeyDown={(e) => activeEnter(e)}
                 className={`${inputFocus == 2 ? 'focusOn' :''}`}
                 />
             </form>
@@ -94,6 +97,7 @@ const Login = () => {
         <div className="accountBtnArea">
             <button className="link" onClick={goAccountPage}>회원가입</button>
         </div>
+        <div className="copyright">Copyright 또!방탈출 All Rights Reserved.</div>
       </div>
     </div>
   )

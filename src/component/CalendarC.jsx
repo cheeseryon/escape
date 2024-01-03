@@ -1,21 +1,25 @@
-import React , { useState, useEffect } from "react";
+import React , { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import {firestore} from "../firebase-config"
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import moment from 'moment';
 
-const CalendarC = ({cancelBtn , item, userId}) => {
+const CalendarC = ({cancelBtn , item, userId, getScheduleByDate, scheduleItems}) => {
     const [value , onChange] = useState(new Date())
-    const docId = moment(value).format('YYYY-MM-DD');
-    const alrstDay = moment(value).format('MM월DD일');
-
+    const yearMonthDay = moment(value).format('YYYY-MM-DD');
+    const alretDay = moment(value).format('MM월DD일');
     const [selectedHour, setSelectedHour] = useState("00");
     const [selectedMinute, setSelectedMin] = useState("00");
     const [hourOptionBox , setHourOptionBox] =useState(false)
     const [minOptionBox , setMinOptionBox] =useState(false)
+
+    /* 상위 컴포넌트로 날짜 전달 */
+    useEffect(() => {
+        getScheduleByDate(yearMonthDay)
+    },[yearMonthDay])
 
     /* 인풋에 입력된 값으로 변경 */
     const changeInputHour = (e) => {setSelectedHour(e.target.value)};
@@ -30,12 +34,13 @@ const CalendarC = ({cancelBtn , item, userId}) => {
         let minTarget = e.target.closest('#min')
         let hourTarget = e.target.closest('#hour')
      
-        if (!hourTarget && !minTarget) {
+        if (!hourTarget) {
             setHourOptionBox(false)
+        }
+        if (!minTarget) {
             setMinOptionBox(false)
         }
     })
-        
 
     /* 옵션창에서 선택된 값으로 변경 */
     const changeSelectedHour = (e) => {
@@ -46,21 +51,31 @@ const CalendarC = ({cancelBtn , item, userId}) => {
         setSelectedMin(e.target.dataset.index)
         setMinOptionBox(false)
     }
-    
+
     const sendScheduleToServer = async () => {
         try {
-            let msg = window.confirm(`${alrstDay} ${selectedHour}시${selectedMinute}분 [ ${item.title} ] 테마를 일정에 등록하시겠습니까?`)
+            let msg = window.confirm(`${alretDay} ${selectedHour}시${selectedMinute}분 [ ${item.title} ] 테마를 일정에 등록하시겠습니까?`)
             if(msg) {
-                const scheduleRef = await setDoc(doc(firestore, userId, "schedule", "list" , docId), {
+                const scheduleRef = await setDoc(doc(firestore, userId, "schedule", "list", item.id), {
                     id: item.id,
+                    img: item.img,
                     title: item.title,
                     store: item.store,
-                    titme: `${selectedHour}:${selectedMinute}`
+                    site: item.site,
+                    genre: item.genre,
+                    time: item.time,
+                    area: item.area,
+                    subArea: item.subArea,
+                    difficulty: item.difficulty,
+                    story: item.story,
+                    timestp: serverTimestamp(),
+                    date: yearMonthDay,
+                    startTime: `${selectedHour}:${selectedMinute}`
                 })
                 cancelBtn(false)
             }
         } catch(error) {
-            console.log("스케쥴 등록 실패")
+            console.log("")
         }
     }
 
@@ -70,14 +85,24 @@ const CalendarC = ({cancelBtn , item, userId}) => {
             cancelBtn(false)
         }
     }
+
   return (
     <div className="calComponent">
         <Calendar
             value={value} 
             className="calendar"
             onChange={onChange}
-            tileContent=""
-            
+            tileContent={({ date }) => {
+                let filteredItem = scheduleItems.filter((x) => x.date === moment(date).format('YYYY-MM-DD'))
+                
+                return (    
+                    filteredItem.length > 0         
+                    ? <div className="mark">
+                        {filteredItem.map((item) => (<span>!</span>))}         
+                    </div>
+                    : ''
+                );
+            }}
             calendarType="US"
             formatDay={(locale, date) => date.toLocaleString("en", {day: "numeric"})}
         />  
@@ -87,15 +112,15 @@ const CalendarC = ({cancelBtn , item, userId}) => {
                 <div id="hour" className="inputBox">
                     <input type="number" value={selectedHour} onChange={changeInputHour} onFocus={hourInputFocus} /> 
                     {   
-                        hourOptionBox 
-                        ? <div id="hourSelect" className="optionSelected">
-                            {
-                                Array.from({length:23}, (_, i) => (
-                                    <p key={i + 1} value={i + 1} data-index={i + 1} onClick={(e) => changeSelectedHour(e)}>{i + 1}</p>
-                                ))
-                            }
-                        </div>
-                        : ''
+                    hourOptionBox 
+                    ? <div id="hourSelect" className="optionSelected">
+                        {
+                            Array.from({length:23}, (_, i) => (
+                                <p key={i + 1} value={i + 1} data-index={i + 1} onClick={(e) => changeSelectedHour(e)}>{i + 1}</p>
+                            ))
+                        }
+                    </div>
+                    : ''
                     }
                 </div>
 
@@ -104,21 +129,21 @@ const CalendarC = ({cancelBtn , item, userId}) => {
                 <div id="min" className="inputBox">
                     <input type="number" value={selectedMinute} onChange={changeInputMin} onFocus={minInputFocus} /> 
                     {   
-                        minOptionBox 
-                        ? <div id="minSelect" className="optionSelected">
-                            {
-                                Array.from({length:12}, (_, i) => (
-                                    <p key={i * 5} value={i* 5} data-index={i* 5} onClick={(e) => changeSelectedMin(e)}>{i * 5}</p>
-                                ))
-                            }
-                        </div>
-                        : ''
+                    minOptionBox 
+                    ? <div id="minSelect" className="optionSelected">
+                        {
+                            Array.from({length:12}, (_, i) => (
+                                <p key={i * 5} value={i* 5} data-index={i* 5} onClick={(e) => changeSelectedMin(e)}>{i * 5}</p>
+                            ))
+                        }
+                    </div>
+                    : ''
                     }
                 </div>
             </div>
         </div>
 
-        <div className="calbtnArea">
+        <div className="bottomBtnArea">
             <div>
                 <span onClick={sendScheduleToServer}>저장</span>
                 <span onClick={addScheduleCancel}>닫기</span>

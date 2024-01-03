@@ -1,12 +1,15 @@
-import React , {useState,useEffect} from 'react';
+import React , {useState,useEffect, useCallback} from 'react';
 import '../App.css'
 import { useNavigate } from 'react-router-dom'
 import myPageIcon from '../img/mypage.png'
-import serchIcon from '../img/serchIcon.png'
+import searchIcon from '../img/search.png'
 import { useDispatch } from 'react-redux';
 import {signOut , auth} from "../firebase-config"
 
+
 const Navbar = ({loginCheck , logOutCheck, schedulesList, scheduleItems }) => {
+  const dispatch = useDispatch()
+
   const navigate = useNavigate();
   let goHome = () => {
     navigate('/')
@@ -20,7 +23,7 @@ const Navbar = ({loginCheck , logOutCheck, schedulesList, scheduleItems }) => {
     if(e.key === "Enter") {        
       navigate(`/?q=${keyword}`)  
 
-      if(keyword == '') {
+      if(keyword === '') {
         navigate('/')
       }
     }
@@ -29,55 +32,46 @@ const Navbar = ({loginCheck , logOutCheck, schedulesList, scheduleItems }) => {
     navigate(`/?q=${keyword}`)  
   }
 
-
- 
   let today = new Date()
   let todayHours = today.getHours()
   const [dDayList , setDDayList] = useState([])
 
-  const dDayCalc = () => {
+  const dDayCalc = useCallback(() => {
     let array = [];
-    schedulesList.map((time, idx) => {  
+    schedulesList.map((time) => {  
       let dDay = new Date(time)
       let leftTime = dDay - today
-      let leftDate = Math.floor(leftTime / (1000 * 60 * 60 * 24));
-      let leftHours = Math.floor(leftTime / (1000 * 60 * 60));
-      let leftHoursCalc = Math.floor(leftHours - leftDate * 24)
 
-      array.push({
-        date : leftDate,
-        hours : leftHoursCalc
-      })
+      if(leftTime > 0 ) {
+        let leftDate = Math.floor(leftTime / (1000 * 60 * 60 * 24));
+        let leftHours = Math.floor(leftTime / (1000 * 60 * 60));
+        let leftHoursCalc = Math.floor(leftHours - leftDate * 24)
+        array.push({
+          date : leftDate,
+          hours : leftHoursCalc
+        })
+      }
     })
     setDDayList(array)
-  }
+  },[schedulesList, todayHours])
 
   useEffect(() => {
     dDayCalc()
   },[schedulesList , todayHours])
-  
-  console.log(dDayList)
-  
 
+  const goToCalendar = (e) => {
+    let tabIndex = e.currentTarget.dataset.idx
+    dispatch({type:"TABINDEX" , payload:{tabIndex:tabIndex}})
+    navigate('/myPage')
+  }
 
-
-  console.log(schedulesList)
-  const goToMyPageNotify = () => {
+  const goToLoginPage = () => {
     let msg = window.confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?")
     if(msg) {
       navigate('/loginPage')
     }
   }
 
-
-  const goToLoginPage = () => {
-    let msg = window.confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?")
-    if(msg) {
-      /* navigate('/loginPage') */
-    }
-  }
-
-  const dispatch = useDispatch()
   const goToMyPage = (e) => {
     let tabIndex = e.currentTarget.dataset.idx
     dispatch({type:"TABINDEX" , payload:{tabIndex:tabIndex}})
@@ -91,8 +85,10 @@ const Navbar = ({loginCheck , logOutCheck, schedulesList, scheduleItems }) => {
         alert("로그아웃 되었습니다.")
         navigate("/")
       })
-      .catch((console.log("실패_로그아웃")))
+      .catch((console.log("")))
   }
+
+ 
 
   return (
     <>
@@ -102,42 +98,47 @@ const Navbar = ({loginCheck , logOutCheck, schedulesList, scheduleItems }) => {
           <div className="util">
             <div className='searchArea'>
               <input type="text" className="searchBox" placeholder="테마 검색" onChange={(e)=>textInput(e)} onKeyDown={(e)=>textSearch(e)} />
-              <img className='searchIcon' src={serchIcon} onClick={iconSearch}/>
+              <img className='searchIcon' src={searchIcon} onClick={iconSearch}/>
             </div>
 
             <div className="notifyListPage">
-              <span className={`notifyIcon ${schedulesList.length > 0 ? "on" : ""}`} onClick={loginCheck ? '' : goToLoginPage}>
-                <span>{schedulesList.length}</span>
-              </span>
+              <span className={`notifyIcon ${schedulesList.length > 0 ? "on" : ""}`} data-idx="0" onClick={loginCheck ? (e) => goToCalendar(e) : goToLoginPage}>
+                {
+                schedulesList.length > 0 
+                  ? <span>{schedulesList.length}</span>
+                  : ''
+                }
+              </span>           
               <div className="hoverBox">
                 <ul>
                   {
-                    dDayList.map((time, timeIdx) => {  
+                    dDayList.length > 0
+                    ? dDayList.map((time, timeIdx) => {  
                       return( 
-                        scheduleItems.map((item, itemIdx) => {
-                          return(
-                            <li item={item} key={item.id}>
-                              { timeIdx === itemIdx
-                                ? `${item.title} 일정까지 ${time.date}일 ${time.hours}시간 남았습니다`
-                                : ''
-                              }
-                            </li>
-                          )
+                        scheduleItems.map((item, idx) => {
+                          {if(timeIdx === idx) {
+                             return(
+                              <li item={item} key={item.id} className="notifyList">
+                                <span onClick={(e) => goToCalendar(e)} data-idx="0"><b>{item.title}</b> 일정까지 <b>{time.date}일 {time.hours}시간</b> 남았습니다.</span>
+                              </li>
+                            ) 
+                          }}
                         })  
                       )                      
                     })
+                    : loginCheck ? <li className="notifyList noN">알림이 없습니다.</li> : <li className="notifyList">로그인이 필요한 서비스입니다.</li>
                   }
                 </ul>
               </div>
             </div>
 
             <div className="myPage" >
-              <img className='myPageIcon' src={myPageIcon} data-idx="0" onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage)}></img>
+              <img className='myPageIcon' src={myPageIcon} data-idx="0" onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage(e))}></img>
               <div className="hoverBox">
                 <ul>
-                  <li onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage)} data-idx="0">좋아요 목록</li>
-                  <li onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage)} data-idx="1">기록한 테마</li>
-                  <li onClick={loginCheck ? goToMyPage : goToLoginPage}>일정 관리</li>
+                  <li onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage(e))} data-idx="0">일정 관리</li>
+                  <li onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage(e))} data-idx="1">좋아요 목록</li>
+                  <li onClick={(e) => (loginCheck ? goToMyPage(e) : goToLoginPage(e))} data-idx="2">기록한 테마</li>                  
                   <li onClick={logOut} className={`logOutBtn ${loginCheck ? "on" : ''}`}>로그아웃</li>
                 </ul>
               </div>

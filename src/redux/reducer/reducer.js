@@ -1,8 +1,8 @@
 const initialState = {
-    areaName: '',
+    mainAreaName: '',
     subAreaName: '',
     genreName: '',
-    tabIndex:''
+    tabIndex:'0'
 };
 function reducer(state = initialState, action) {
     const { type, payload } = action;
@@ -16,7 +16,7 @@ function reducer(state = initialState, action) {
         case "AREA_SELECT":
             return {
                 ...state,
-                areaName : payload.areaName,
+                mainAreaName : payload.mainAreaName,
                 subAreaName: '',
                 genreName: ''
             }
@@ -31,44 +31,7 @@ function reducer(state = initialState, action) {
                 ...state,
                 tabIndex: payload.tabIndex,
             }
-        
-      /*   case "MODAL_LIKE":
-            return {
-                ...state,
-                likeToggle: (state.likeToggle == false) ? true : false
-            }
-        case "MODAL_ID":
-            const uddateModalItemId = state.likeId.includes(payload.modalItemId)
-                ? state.likeId.filter(id => id !== payload.modalItemId)
-                : [...state.likeId, payload.modalItemId]
-            return {
-                ...state,
-                likeId : uddateModalItemId
-            }
-        case "CARD_LIKE":
-            return {
-                ...state,
-                likeToggle: (state.likeToggle == false) ? true : false
-            };
-        case "CARD_ID":
-            const updateCardItemId = state.likeId.includes(payload.cardItemId)
-                ? state.likeId.filter(id => id !== payload.cardItemId)
-                : [...state.likeId, payload.cardItemId];
-        
-            return {
-                ...state,
-                likeId: updateCardItemId
-            };
-
-        case "LIKE_ID_REMOVE":
-            const updateLikeIdRemove = state.likeId.includes(payload.removeId)
-                ? state.likeId.filter(id => id !== payload.removeId)
-                : [...state.likeId, payload.removeId]
-            return {
-                ...state,
-                likeId: updateLikeIdRemove
-            } */
-
+            
         default:
             return state;
     }

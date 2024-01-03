@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React,{ useEffect,useState,useRef,useCallback} from 'react';
 import '../App.css'
-import { useSelector } from 'react-redux';
-import { useSearchParams , useNavigate } from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {useSearchParams,useNavigate} from 'react-router-dom';
 import ProductCard from '../component/ProductCard';
 import GenreList from '../component/GenreList';
 import AreaList from '../component/AreaList'
 import Navbar from '../component/Navbar';
 import ProductModal from '../component/ProductModal';
 import Alignment from '../component/Alignment';
-import themeDb from '../db/dataBase.json'
-import { auth, onAuthStateChanged , } from "../firebase-config"
+import Footer from '../component/Footer';
+import themeDb from '../db/db.json'
+import {auth, onAuthStateChanged ,} from "../firebase-config"
 
-const ProductAll = ({likeIdList , appLogoutCheck, recordedIdList, schedulesList, scheduleItems}) => {
+const ProductAll = ({likeIdList,appLogoutCheck,reviewIdList,schedulesList,scheduleItems,reviewObJ,scheduleId}) => {
   /* 로그인 유저 정보 */
   const user = auth.currentUser
   let userId;
@@ -20,7 +21,7 @@ const ProductAll = ({likeIdList , appLogoutCheck, recordedIdList, schedulesList,
   }
  
   /* 하위 컴포넌트에 로그인 확인여부를 전달 */
-  const [loginCheck , setLoginCheck] = useState(false)
+  const [loginCheck,setLoginCheck] = useState(false)
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       user ? setLoginCheck(true) : setLoginCheck(false)
@@ -36,7 +37,7 @@ const ProductAll = ({likeIdList , appLogoutCheck, recordedIdList, schedulesList,
   /* 렌더링할 테마 필터  */
   const [prodList, setProductList] = useState([]);
   const [query] = useSearchParams();
-  const [data , setData] = useState(themeDb.theme)
+  const [data,setData] = useState(themeDb.theme)
   const dataAlignment = (data) => {
     setData(data)
   }
@@ -50,22 +51,23 @@ const ProductAll = ({likeIdList , appLogoutCheck, recordedIdList, schedulesList,
   };
   useEffect(() => {
     getProducts();
-  }, [query , data]);
+  }, [query,data]);
 
   /* 지역,장르 필터 */
-  let areaName = useSelector(state => state.areaName)
+  let mainAreaName = useSelector(state => state.mainAreaName)
   let subAreaName = useSelector(state => state.subAreaName)
   let genreName = useSelector(state => state.genreName)
-  const [filteredProduct , setfilteredProduct] = useState([]);
-  const filteredArea = prodList.filter((item) => item.area.includes(areaName));
+  const [filteredProduct,setfilteredProduct] = useState([]);
+  const filteredArea = prodList.filter((item) => item.area.includes(mainAreaName));
   const filteredGenre = filteredArea.filter((item) => 
     item.subArea.includes(subAreaName) && item.genre.includes(genreName)
-  );
+  )
+
   useEffect(() => {
     setfilteredProduct(filteredGenre);
-  }, [areaName , subAreaName, genreName, prodList]);
+  }, [mainAreaName,subAreaName, genreName, prodList]);
 
-  const [showModal , setShowModal ] = useState(false)
+  const [showModal,setShowModal ] = useState(false)
   const [modalItem, setModalItem] = useState(null);
   const hideModal = (item) => {
     setShowModal(item)
@@ -97,64 +99,69 @@ const ProductAll = ({likeIdList , appLogoutCheck, recordedIdList, schedulesList,
   }
 
   return (
-    <main>
-      <Navbar
-        loginCheck={loginCheck}
-        logOutCheck={logOutCheck}
-        schedulesList={schedulesList}
-        scheduleItems={scheduleItems}
-      />
-      <div className="topInnerWrap">
-        <div className="inner">           
-          <AreaList />
-          <GenreList />
-          <Alignment themeDb={themeDb.theme} dataAlignment={dataAlignment}/>
+    <div className="productAllpage">
+        <Navbar
+          loginCheck={loginCheck}
+          logOutCheck={logOutCheck}
+          schedulesList={schedulesList}
+          scheduleItems={scheduleItems}
+        />
+        <div className="topInnerWrap" id="productAllTopInner">
+          <div className="inner">           
+            <AreaList />
+            <GenreList />
+            <Alignment themeDb={themeDb.theme} dataAlignment={dataAlignment}/>
+          </div>
         </div>
-      </div>
 
-      <div className="inner">
-        <div className="itemlistBox">
-          {
-            filteredGenre.length > 0
-            ? filteredProduct.map((menu, fpIdx) => (
-              <div className="itemWrap">
-                <ProductCard
-                item={menu}
-                key={fpIdx}
-                index={fpIdx}
-                onClick={getProdCardData}
-                getProdCardData={getProdCardData}
-                loginCheck={loginCheck}
-                userId={ user ? userId : ""}
-                likeIdList={likeIdList}
-                />
+      <main style={{minHeight : window.innerHeight - 80 + "px"}}>
+        <div className="inner">
+          <div className="itemlistBox">
+            {
+              filteredGenre.length > 0
+              ? filteredProduct.map((item, idx) => 
+                <div className="itemWrap">
+                  <ProductCard
+                    item={item}
+                    key={item.id}
+                    onClick={getProdCardData}
+                    getProdCardData={getProdCardData}
+                    loginCheck={loginCheck}
+                    userId={ user ? userId : ""}
+                    likeIdList={likeIdList}
+                  />
+                </div>
+              ) 
+              : query.get('q') ? 
+                <div className='failedMassage'>
+                  <p className='result'>검색 결과 <span>' {query.get('q')} '</span> 이(가) 없습니다.</p>
+                  <p className='backBtn'><span onClick={searchInit}>뒤로 가기</span></p>                
+                </div>
+                : <div className='failedMassage'>
+                <p className='result'>해당 조건의 테마가 없습니다.</p>          
               </div>
-            )) 
-            : query.get('q') ? 
-              <div className='failedMassage'>
-                <p className='result'>검색 결과 <span>' {query.get('q')} '</span> 이(가) 없습니다.</p>
-                <p className='backBtn'><span onClick={searchInit}>뒤로 가기</span></p>                
-              </div>
-              : <div className='failedMassage'>
-              <p className='result'>해당 조건의 테마가 없습니다.</p>          
-            </div>
-          }
+            }
+          </div>
         </div>
-      </div>
-          {
-            showModal
-            ? <ProductModal
-                item={modalItem}
-                hideModal={hideModal}
-                loginCheck={loginCheck}
-                userId={ user ? userId : ''}
-                likeIdList={likeIdList}
-                recordedIdList={recordedIdList}
-                scheduleItems={scheduleItems}
-              />
-            : null
-          }
-    </main>
+            {
+              showModal
+              ? <ProductModal
+                  item={modalItem}
+                  hideModal={hideModal}
+                  loginCheck={loginCheck}
+                  userId={ user ? userId : ''}
+                  likeIdList={likeIdList}
+                  reviewIdList={reviewIdList}
+                  reviewObJ={reviewObJ}
+                  scheduleItems={scheduleItems}
+                  schedulesList={schedulesList}
+                  scheduleId={scheduleId}
+                />
+              : ""
+            }
+      </main>
+      <Footer />
+    </div>
   );
 }
 

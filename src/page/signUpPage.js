@@ -1,8 +1,29 @@
-import React , { useState , useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React , {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import { auth , createUserWithEmailAndPassword } from "../firebase-config";
 
-const Account = () => {
+const SignUp = () => {
+  const navigate = useNavigate();
+  const goHome = () => {
+      navigate('/')
+  }
+  const goBack = () => {
+    let msg = window.confirm("회원가입을 취소하시겠습니까?")
+    if(msg) {
+      navigate('/loginPage')
+    }
+  }
+
+  const [inputFocus, setInputFocus ] = useState('');
+  const inputFocusOut = () => {
+    window.addEventListener('click' , (e) => {
+      if(!e.target.closest('input')) {
+        setInputFocus('')
+      }
+    })
+  }
+  inputFocusOut()
+
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerPasswordCheck, setRegisterPasswordCheck] = useState("");
@@ -10,7 +31,7 @@ const Account = () => {
   const [pwFaild, setPwFaild] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const register = async () => {
+  const signUp = async () => {
     let koreanRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
     if(registerEmail === '') {
@@ -18,25 +39,21 @@ const Account = () => {
       setErrorMsg('이메일을 입력해주세요.');
       return
     }
-
     if(koreanRegex.test(registerEmail)) {
       setEmailFaild(true)
       setErrorMsg('이메일 형식을 확인해주세요.');
       return
     } 
-      
     if(registerPassword === '' || registerPassword.length < 7) {
       setPwFaild(true)
       setErrorMsg('숫자 8자리 이상으로 만들어주세요.');
       return
     }
-
     if (registerPassword !== registerPasswordCheck) {
       setPwFaild(true)
       setErrorMsg('비밀번호가 일치하지 않습니다');
       return
     }
-
     if(
       registerEmail !== '' &&
       registerPassword === registerPasswordCheck &&
@@ -45,14 +62,12 @@ const Account = () => {
         try {
           setErrorMsg('');
           const createdUser = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
-          /* console.log(createdUser); */
           setRegisterEmail("");
           setRegisterPassword("");
           if(window.confirm("회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.")) {
             navigate('/loginPage')
           }
         } catch(err){
-          //console.log(err.code);
           switch (err.code) {          
             case 'auth/invalid-email':
               setEmailFaild(true)
@@ -66,33 +81,10 @@ const Account = () => {
         }
       }  
     }   
-    
   
-
-  const [inputFocus, setInputFocus ] = useState('');
-  const inputFocusOut = () => {
-    window.addEventListener('click' , (e) => {
-      if(!e.target.closest('input')) {
-        setInputFocus('')
-      }
-    })
-  }
-  inputFocusOut()
-
-  const navigate = useNavigate();
-  const goHome = () => {
-      navigate('/')
-  }
-  const goBack = () => {
-    let msg = window.confirm("회원가입을 취소하시겠습니까?")
-    if(msg) {
-      navigate('/loginPage')
-    }
-  }
-
   return (
-    <div className='accountCreatePage'>
-      <div className='wrap'>
+    <div className="termAndSingPage" id='signUpPage'>
+      <main>
         <h1 className='logo' onClick={goHome}>또!방탈출</h1>
 
         <div className='userInfoInput'>
@@ -141,16 +133,17 @@ const Account = () => {
           </div>
         </div>
 
-        <div className='signUpBtn'>
-            <button type="submit" onClick={register}>가입하기</button>
+        <div className='signUpBtn nextBtn'>
+            <button type="submit" onClick={signUp}>회원가입하기</button>
         </div>
 
-        <div className="backBtnArea">
+        <div className="cancelBtn">
             <button onClick={goBack}>취소</button>
         </div>
-      </div>
+        <div className="copyright">Copyright 또!방탈출 All Rights Reserved.</div>
+      </main>
     </div>
   )
 }
 
-export default Account
+export default SignUp
